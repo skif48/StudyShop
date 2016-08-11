@@ -1,5 +1,6 @@
 package com.shop;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,5 +22,13 @@ public class ShopRepository {
 
     public void addProduct(UUID uuid, Product product){
         this.repository.put(uuid, product);
+    }
+
+    public Collection<Product> getAllProducts(){
+        return this.repository.values();
+    }
+
+    public void deleteProductByUUID(UUID uuid){
+        this.repository.remove(uuid);
     }
 }

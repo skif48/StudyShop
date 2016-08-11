@@ -46,4 +46,20 @@ public class ShopController {
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity getAllProducts(){
+        return new ResponseEntity<>(this.service.getAllProducts(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity deleteProduct(@RequestHeader("ProductID") UUID uuid){
+        if(Tools.isValidUUID(uuid.toString())) {
+            HttpStatus status = this.service.deleteProductByUUID(uuid);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

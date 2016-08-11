@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -29,5 +30,20 @@ public class ShopService {
 
     public Product getProductByUUID(UUID uuid){
         return this.shopRepository.getProductByUUID(uuid);
+    }
+
+    public Collection<Product> getAllProducts(){
+        return this.shopRepository.getAllProducts();
+    }
+
+    public HttpStatus deleteProductByUUID(UUID uuid){
+        try {
+            this.shopRepository.deleteProductByUUID(uuid);
+            return HttpStatus.OK;
+        } catch (NullPointerException npe){
+            return HttpStatus.BAD_REQUEST;
+        } catch (Exception exc){
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
     }
 }
