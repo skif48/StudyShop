@@ -1,5 +1,8 @@
 package com.shop;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -13,5 +16,10 @@ public class Tools {
         } catch (Exception ex) {
             return false;
         }
+    }
+
+    public static Object parseObjectFromJSON(String JSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(JSON, Product.class);
     }
 }

@@ -12,7 +12,7 @@ public class ShopRepository {
     private final Map<UUID, Product> repository;
 
     public ShopRepository() {
-        this.repository = new ConcurrentHashMap<UUID, Product>();
+        this.repository = new ConcurrentHashMap<>();
     }
 
     public Product getProductByUUID(UUID uuid){
