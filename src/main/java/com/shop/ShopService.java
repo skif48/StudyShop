@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -15,8 +16,15 @@ public class ShopService {
     @Autowired
     private ShopRepository shopRepository;
 
+    @Autowired
+    private ProductDAO productDAO;
+
     public ShopService(){
 
+    }
+
+    public void setShopRepository(ShopRepository shopRepository){
+        this.shopRepository = shopRepository;
     }
 
     public HttpStatus putProduct(Product product){
@@ -28,12 +36,45 @@ public class ShopService {
         return HttpStatus.BAD_REQUEST;
     }
 
+    public HttpStatus putProductUsingDAO(Product product){
+        try{
+            productDAO.save(product);
+        } catch (Exception exc){
+            exc.printStackTrace();
+            return HttpStatus.BAD_REQUEST;
+        }
+
+        return HttpStatus.OK;
+    }
+
+    public Product getProductUsingDAO(UUID uuid){
+        Product product = null;
+        try{
+            product = productDAO.findByUUID(uuid.toString());
+        } catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return product;
+    }
+
+    public Collection<Product> getAllProductsUsingDAO(){
+        Iterable<Product> products = null;
+        try{
+            products = productDAO.findAll();
+        } catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+        return (Collection<Product>) products;
+    }
+
     public Product getProductByUUID(UUID uuid){
         return this.shopRepository.getProductByUUID(uuid);
     }
 
-    public Collection<Product> getAllProducts(){
-        return this.shopRepository.getAllProducts();
+    public ArrayList<Product> getAllProducts(){
+        return new ArrayList<>(this.shopRepository.getAllProducts());
     }
 
     public HttpStatus deleteProductByUUID(UUID uuid){

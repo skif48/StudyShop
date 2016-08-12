@@ -30,7 +30,8 @@ public class ShopController {
         }
 
         if(product != null) {
-            HttpStatus status = this.service.putProduct(product);
+            //HttpStatus status = this.service.putProduct(product);
+            HttpStatus status = this.service.putProductUsingDAO(product);
             return new ResponseEntity<>(status);
         }
         else {
@@ -42,7 +43,8 @@ public class ShopController {
     @ResponseBody
     public ResponseEntity getProduct(@RequestHeader("ProductID") UUID uuid){
         if(Tools.isValidUUID(uuid.toString()))
-            return new ResponseEntity<>(this.service.getProductByUUID(uuid), HttpStatus.OK);
+            return new ResponseEntity<>(this.service.getProductUsingDAO(uuid), HttpStatus.OK);
+            //return new ResponseEntity<>(this.service.getProductByUUID(uuid), HttpStatus.OK);
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
