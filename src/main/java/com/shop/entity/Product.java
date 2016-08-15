@@ -1,7 +1,6 @@
 package com.shop.entity;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
@@ -16,7 +15,7 @@ public class Product {
 
     private long ID;
 
-    private String uuid;
+    private UUID uuid;
 
     private Type type;
 
@@ -26,7 +25,7 @@ public class Product {
     }
 
     public Product(UUID uuid, Type type, String label) {
-        this.uuid = uuid.toString();
+        this.uuid = uuid;
         this.type = type;
         this.label = label;
     }
@@ -42,7 +41,7 @@ public class Product {
     @Column(name = "uuid")
     @NotNull
     public UUID getUuid() {
-        return UUID.fromString(uuid);
+        return uuid;
     }
 
     @Column(name = "type")
@@ -62,15 +61,24 @@ public class Product {
         this.ID = ID;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
     public void setType(Type type) {
         this.type = type;
     }
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                " uuid=" + uuid +
+                ", type=" + type +
+                ", label='" + label + '\'' +
+                '}';
     }
 }

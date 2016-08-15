@@ -31,7 +31,7 @@ public class ShopService {
 
     public HttpStatus putProduct(Product product){
         if(product != null) {
-            this.shopRepository.addProduct(product.getUuid(), product);
+            shopRepository.addProduct(product.getUuid(), product);
             return HttpStatus.OK;
         }
 
@@ -50,11 +50,16 @@ public class ShopService {
     }
 
     public Product getProductUsingDAO(UUID uuid){
-        Product product = null;
+        Product product = new Product();
         try{
-            product = productRepository.findByuuid(uuid.toString());
+            System.out.println(uuid.toString());
+            product = productRepository.findByUuid(uuid);
+            if(product == null){
+                product = new Product();
+            }
         } catch (Exception exc){
             exc.printStackTrace();
+            return product;
         }
 
         return product;
@@ -72,21 +77,25 @@ public class ShopService {
     }
 
     public Product getProductByUUID(UUID uuid){
-        return this.shopRepository.getProductByUUID(uuid);
+        return shopRepository.getProductByUUID(uuid);
     }
 
     public ArrayList<Product> getAllProducts(){
-        return new ArrayList<>(this.shopRepository.getAllProducts());
+        return new ArrayList<>(shopRepository.getAllProducts());
     }
 
     public HttpStatus deleteProductByUUID(UUID uuid){
         try {
-            this.shopRepository.deleteProductByUUID(uuid);
+            shopRepository.deleteProductByUUID(uuid);
             return HttpStatus.OK;
         } catch (NullPointerException npe){
             return HttpStatus.BAD_REQUEST;
         } catch (Exception exc){
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
+    }
+
+    public Product getProductByID(long id){
+        return productRepository.findById(id);
     }
 }

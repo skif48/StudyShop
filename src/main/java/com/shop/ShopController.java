@@ -32,7 +32,7 @@ public class ShopController {
 
         if(product != null) {
             //HttpStatus status = this.service.putProduct(product);
-            HttpStatus status = this.service.putProductUsingDAO(product);
+            HttpStatus status = service.putProductUsingDAO(product);
             return new ResponseEntity<>(status);
         }
         else {
@@ -43,25 +43,35 @@ public class ShopController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity getProduct(@RequestHeader("ProductID") UUID uuid){
-        if(Tools.isValidUUID(uuid.toString()))
-            return new ResponseEntity<>(this.service.getProductUsingDAO(uuid), HttpStatus.OK);
+        if(Tools.isValidUUID(uuid.toString())){
+            Product product = service.getProductUsingDAO(uuid);
+            System.out.println(product);
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        }
             //return new ResponseEntity<>(this.service.getProductByUUID(uuid), HttpStatus.OK);
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @RequestMapping(value = "/id", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity getProductByID(@RequestHeader("ProductID") long id){
+        Product product = service.getProductByID(id);
+
+        return new ResponseEntity<>(product ,HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity getAllProducts(){
-        return new ResponseEntity<>(this.service.getAllProducts(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity deleteProduct(@RequestHeader("ProductID") UUID uuid){
         if(Tools.isValidUUID(uuid.toString())) {
-            HttpStatus status = this.service.deleteProductByUUID(uuid);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(service.deleteProductByUUID(uuid));
         } else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
