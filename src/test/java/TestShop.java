@@ -1,6 +1,7 @@
-import com.shop.Product;
+import com.shop.entity.Product;
 import com.shop.ShopRepository;
 import com.shop.ShopService;
+import com.shop.entity.Type;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class TestShop {
         shopService = new ShopService();
         shopRepository = new ShopRepository();
         shopService.setShopRepository(shopRepository);
-        product = new Product(UUID.randomUUID(), Product.Type.PHONE, "Asus Zenfone 2");
+        product = new Product(UUID.randomUUID(), Type.PHONE, "Asus Zenfone 2");
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.shop;
 
+import com.shop.entity.Product;
+import com.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ public class ShopService {
     private ShopRepository shopRepository;
 
     @Autowired
-    private ProductDAO productDAO;
+    private ProductRepository productRepository;
 
     public ShopService(){
 
@@ -38,7 +40,7 @@ public class ShopService {
 
     public HttpStatus putProductUsingDAO(Product product){
         try{
-            productDAO.save(product);
+            productRepository.save(product);
         } catch (Exception exc){
             exc.printStackTrace();
             return HttpStatus.BAD_REQUEST;
@@ -50,7 +52,7 @@ public class ShopService {
     public Product getProductUsingDAO(UUID uuid){
         Product product = null;
         try{
-            product = productDAO.findByUUID(uuid.toString());
+            product = productRepository.findByuuid(uuid.toString());
         } catch (Exception exc){
             exc.printStackTrace();
         }
@@ -61,7 +63,7 @@ public class ShopService {
     public Collection<Product> getAllProductsUsingDAO(){
         Iterable<Product> products = null;
         try{
-            products = productDAO.findAll();
+            products = productRepository.findAll();
         } catch (Exception exc){
             exc.printStackTrace();
         }

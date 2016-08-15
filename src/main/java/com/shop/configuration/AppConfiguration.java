@@ -1,5 +1,7 @@
-package com.shop;
+package com.shop.configuration;
 
+import com.shop.ShopRepository;
+import com.shop.ShopService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

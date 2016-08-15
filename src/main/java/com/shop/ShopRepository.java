@@ -1,5 +1,7 @@
 package com.shop;
 
+import com.shop.entity.Product;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
