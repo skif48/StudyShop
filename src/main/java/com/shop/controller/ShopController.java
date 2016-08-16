@@ -1,6 +1,8 @@
-package com.shop;
+package com.shop.controller;
 
+import com.shop.utils.Tools;
 import com.shop.entity.Product;
+import com.shop.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

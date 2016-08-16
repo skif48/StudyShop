@@ -1,4 +1,4 @@
-package com.shop;
+package com.shop.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shop.entity.Product;

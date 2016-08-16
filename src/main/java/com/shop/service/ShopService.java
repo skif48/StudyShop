@@ -1,12 +1,10 @@
-package com.shop;
+package com.shop.service;
 
 import com.shop.entity.Product;
 import com.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 

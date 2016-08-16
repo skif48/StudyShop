@@ -1,6 +1,6 @@
 package com.shop.configuration;
 
-import com.shop.ShopService;
+import com.shop.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
