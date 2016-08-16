@@ -55,4 +55,8 @@ public class ShopService {
     public void deleteProductByUUID(UUID uuid) {
         productRepository.deleteByUuid(uuid.toString());
     }
+
+    public void deleteAllProducts(){
+        productRepository.deleteAll();
+    }
 }

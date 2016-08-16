@@ -14,7 +14,6 @@ import java.util.UUID;
  */
 @RestController
 public class ShopController {
-
     @Autowired
     private ShopService service;
 
@@ -58,6 +57,17 @@ public class ShopController {
     @ResponseBody
     public ResponseEntity getAllProducts(){
         return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/all", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity deleteAllProducts(){
+        try {
+            service.deleteAllProducts();
+            return new ResponseEntity<>("all products successfully deleted from DB",HttpStatus.OK);
+        } catch (Exception exc){
+            return new ResponseEntity<>(exc.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
