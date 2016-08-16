@@ -30,15 +30,6 @@ public class ShopService {
     }
 
     public HttpStatus putProduct(Product product){
-        if(product != null) {
-            shopRepository.addProduct(UUID.fromString(product.getUuid()), product);
-            return HttpStatus.OK;
-        }
-
-        return HttpStatus.BAD_REQUEST;
-    }
-
-    public HttpStatus putProductUsingDAO(Product product){
         try{
             productRepository.save(product);
         } catch (Exception exc){
@@ -49,7 +40,7 @@ public class ShopService {
         return HttpStatus.OK;
     }
 
-    public Product getProductUsingDAO(UUID uuid){
+    public Product getProduct(UUID uuid){
         Product product = new Product();
         try{
             System.out.println(uuid.toString());
@@ -65,7 +56,7 @@ public class ShopService {
         return product;
     }
 
-    public Collection<Product> getAllProductsUsingDAO(){
+    public Collection<Product> getAllProducts(){
         Iterable<Product> products = null;
         try{
             products = productRepository.findAll();
@@ -76,17 +67,9 @@ public class ShopService {
         return (Collection<Product>) products;
     }
 
-    public Product getProductByUUID(UUID uuid){
-        return shopRepository.getProductByUUID(uuid);
-    }
-
-    public ArrayList<Product> getAllProducts(){
-        return new ArrayList<>(shopRepository.getAllProducts());
-    }
-
     public HttpStatus deleteProductByUUID(UUID uuid){
         try {
-            shopRepository.deleteProductByUUID(uuid);
+            System.out.println("Deleted: " + productRepository.deleteByUuid(uuid.toString()));
             return HttpStatus.OK;
         } catch (NullPointerException npe){
             return HttpStatus.BAD_REQUEST;

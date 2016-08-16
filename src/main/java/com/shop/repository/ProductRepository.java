@@ -16,6 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select p from Product p where p.uuid = :uuid")
     Product findByUuid(@Param("uuid") String uuid);
 
-    @Query("delete from Product p where p.uuid = :uuid")
-    void deleteByUuid(@Param("uuid") String uuid);
+    @Transactional
+    Object deleteByUuid( String uuid);
 }
