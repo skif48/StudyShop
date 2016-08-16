@@ -1,6 +1,7 @@
 package com.shop.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shop.entity.Characteristic;
 import com.shop.entity.Product;
 
 import java.io.IOException;
@@ -20,8 +21,14 @@ public class Tools {
         }
     }
 
-    public static Object parseObjectFromJSON(String JSON) throws IOException {
+    public static Object parseProductFromJSON(String JSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(JSON, Product.class);
     }
+
+    public static Object parseCharacteristicFromJSON(String JSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(JSON, Characteristic.class);
+    }
+
 }

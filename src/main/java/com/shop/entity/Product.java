@@ -31,9 +31,10 @@ public class Product {
     }
 
     @Id
+    @NotNull
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name= "increment", strategy= "increment")
-    @Column(name = "id", length = 6, nullable = false)
+    @Column(name = "product_id", length = 6, nullable = false)
     public long getID() {
         return ID;
     }

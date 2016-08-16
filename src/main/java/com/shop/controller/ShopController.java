@@ -1,5 +1,6 @@
 package com.shop.controller;
 
+import com.shop.entity.Characteristic;
 import com.shop.utils.Tools;
 import com.shop.entity.Product;
 import com.shop.service.ShopService;
@@ -25,7 +26,7 @@ public class ShopController {
         Product product = null;
 
         try {
-            product = (Product) Tools.parseObjectFromJSON(productJSON);
+            product = (Product) Tools.parseProductFromJSON(productJSON);
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -85,5 +86,17 @@ public class ShopController {
             }
         } else
             return new ResponseEntity<>("requested uuid is not valid: " + uuid.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/characteristic", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity putCharacteristic(@RequestBody String characteristicJSON){
+        try{
+            Characteristic characteristic = (Characteristic) Tools.parseCharacteristicFromJSON(characteristicJSON);
+            service.addCharacteristicsToProduct(characteristic);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception exc){
+            return new ResponseEntity<>(exc.toString(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
