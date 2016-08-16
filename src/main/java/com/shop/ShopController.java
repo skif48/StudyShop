@@ -53,14 +53,6 @@ public class ShopController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/id", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity getProductByID(@RequestHeader("ProductID") long id){
-        Product product = service.getProductByID(id);
-
-        return new ResponseEntity<>(product ,HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity getAllProducts(){

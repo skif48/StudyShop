@@ -31,7 +31,7 @@ public class ShopService {
 
     public HttpStatus putProduct(Product product){
         if(product != null) {
-            shopRepository.addProduct(product.getUuid(), product);
+            shopRepository.addProduct(UUID.fromString(product.getUuid()), product);
             return HttpStatus.OK;
         }
 
@@ -53,7 +53,7 @@ public class ShopService {
         Product product = new Product();
         try{
             System.out.println(uuid.toString());
-            product = productRepository.findByUuid(uuid);
+            product = productRepository.findByUuid(uuid.toString());
             if(product == null){
                 product = new Product();
             }
@@ -93,9 +93,5 @@ public class ShopService {
         } catch (Exception exc){
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
-    }
-
-    public Product getProductByID(long id){
-        return productRepository.findById(id);
     }
 }

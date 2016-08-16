@@ -39,7 +39,7 @@ public class TestShop {
     @Test
     public void whenProductIsAccessedByValidUUIDItIsReturned() throws Exception{
         shopService.putProduct(product);
-        Assert.assertEquals(shopService.getProductByUUID(this.product.getUuid()), product);
+        Assert.assertEquals(shopService.getProductByUUID(UUID.fromString(this.product.getUuid())), product);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class TestShop {
     @Test
     public void whenProductIsDeletedByUUIDItIsRemovedFromTheRepoAndHttpStatusOKIsReturned() throws Exception{
         shopService.putProduct(product);
-        HttpStatus status = shopService.deleteProductByUUID(product.getUuid());
+        HttpStatus status = shopService.deleteProductByUUID(UUID.fromString(product.getUuid()));
         Assert.assertEquals(shopService.getAllProducts().size(), 0);
         Assert.assertEquals(HttpStatus.OK, status);
     }

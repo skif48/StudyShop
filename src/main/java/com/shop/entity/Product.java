@@ -15,7 +15,7 @@ public class Product {
 
     private long ID;
 
-    private UUID uuid;
+    private String uuid;
 
     private Type type;
 
@@ -25,7 +25,7 @@ public class Product {
     }
 
     public Product(UUID uuid, Type type, String label) {
-        this.uuid = uuid;
+        this.uuid = uuid.toString();
         this.type = type;
         this.label = label;
     }
@@ -40,8 +40,8 @@ public class Product {
 
     @Column(name = "uuid")
     @NotNull
-    public UUID getUuid() {
-        return uuid;
+    public String getUuid() {
+        return uuid.toString();
     }
 
     @Column(name = "type")
@@ -69,7 +69,7 @@ public class Product {
         this.label = label;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

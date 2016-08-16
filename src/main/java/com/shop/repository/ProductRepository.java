@@ -14,8 +14,8 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select p from Product p where p.uuid = :uuid")
-    Product findByUuid(@Param("uuid") UUID uuid);
+    Product findByUuid(@Param("uuid") String uuid);
 
-    @Query("select p from Product p where p.id = :id")
-    Product findById(@Param("id") Long id);
+    @Query("delete from Product p where p.uuid = :uuid")
+    void deleteByUuid(@Param("uuid") String uuid);
 }
