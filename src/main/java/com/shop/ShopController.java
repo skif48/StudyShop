@@ -30,12 +30,11 @@ public class ShopController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if(product != null) {
-            HttpStatus status = service.putProduct(product);
-            return new ResponseEntity<>(status);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try{
+            service.putProduct(product);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -43,9 +42,13 @@ public class ShopController {
     @ResponseBody
     public ResponseEntity getProduct(@RequestHeader("ProductID") UUID uuid){
         if(Tools.isValidUUID(uuid.toString())){
-            Product product = service.getProduct(uuid);
-            System.out.println(product);
-            return new ResponseEntity<>(product, HttpStatus.OK);
+            try {
+                Product product = service.getProduct(uuid);
+                return new ResponseEntity<>(product, HttpStatus.OK);
+            } catch (Exception exc){
+                return new ResponseEntity<>(exc.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -61,8 +64,14 @@ public class ShopController {
     @ResponseBody
     public ResponseEntity deleteProduct(@RequestHeader("ProductID") UUID uuid){
         if(Tools.isValidUUID(uuid.toString())) {
-            return new ResponseEntity<>(service.deleteProductByUUID(uuid));
+            try {
+                service.deleteProductByUUID(uuid);
+                return new ResponseEntity<>("successfully deleted product with uuid: " + uuid.toString(), HttpStatus.OK);
+            } catch (Exception exc){
+                exc.printStackTrace();
+                return new ResponseEntity<>(exc.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("requested uuid is not valid: " + uuid.toString(), HttpStatus.BAD_REQUEST);
     }
 }

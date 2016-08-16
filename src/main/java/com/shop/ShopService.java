@@ -16,39 +16,24 @@ import java.util.UUID;
 @Service
 public class ShopService {
     @Autowired
-    private ShopRepository shopRepository;
-
-    @Autowired
     private ProductRepository productRepository;
 
-    public ShopService(){
-
+    public ShopService() {
     }
 
-    public void setShopRepository(ShopRepository shopRepository){
-        this.shopRepository = shopRepository;
+    public void putProduct(Product product) {
+        productRepository.save(product);
     }
 
-    public HttpStatus putProduct(Product product){
-        try{
-            productRepository.save(product);
-        } catch (Exception exc){
-            exc.printStackTrace();
-            return HttpStatus.BAD_REQUEST;
-        }
-
-        return HttpStatus.OK;
-    }
-
-    public Product getProduct(UUID uuid){
+    public Product getProduct(UUID uuid) {
         Product product = new Product();
-        try{
+        try {
             System.out.println(uuid.toString());
             product = productRepository.findByUuid(uuid.toString());
-            if(product == null){
+            if (product == null) {
                 product = new Product();
             }
-        } catch (Exception exc){
+        } catch (Exception exc) {
             exc.printStackTrace();
             return product;
         }
@@ -56,25 +41,18 @@ public class ShopService {
         return product;
     }
 
-    public Collection<Product> getAllProducts(){
+    public Collection<Product> getAllProducts() {
         Iterable<Product> products = null;
-        try{
+        try {
             products = productRepository.findAll();
-        } catch (Exception exc){
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
 
         return (Collection<Product>) products;
     }
 
-    public HttpStatus deleteProductByUUID(UUID uuid){
-        try {
-            System.out.println("Deleted: " + productRepository.deleteByUuid(uuid.toString()));
-            return HttpStatus.OK;
-        } catch (NullPointerException npe){
-            return HttpStatus.BAD_REQUEST;
-        } catch (Exception exc){
-            return HttpStatus.INTERNAL_SERVER_ERROR;
-        }
+    public void deleteProductByUUID(UUID uuid) {
+        productRepository.deleteByUuid(uuid.toString());
     }
 }
