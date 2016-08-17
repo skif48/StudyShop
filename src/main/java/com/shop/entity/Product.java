@@ -21,13 +21,16 @@ public class Product {
 
     private String label;
 
+    private Characteristic characteristic;
+
     public Product() {
     }
 
-    public Product(UUID uuid, Type type, String label) {
+    public Product(UUID uuid, Type type, String label, Characteristic characteristic) {
         this.uuid = uuid.toString();
         this.type = type;
         this.label = label;
+        this.characteristic = characteristic;
     }
 
     @Id
@@ -56,6 +59,16 @@ public class Product {
     @NotNull
     public String getLabel() {
         return label;
+    }
+
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "characteristic_foreign")
+    public Characteristic getCharacteristic() {
+        return characteristic;
+    }
+
+    public void setCharacteristic(Characteristic characteristic) {
+        this.characteristic = characteristic;
     }
 
     public void setID(long ID) {

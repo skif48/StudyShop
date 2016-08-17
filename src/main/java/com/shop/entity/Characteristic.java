@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 public class Characteristic {
     private long ID;
     private String uuid;
-    private Product product;
     private int year;
     private int RAM;
     private String processor;
@@ -26,20 +25,13 @@ public class Characteristic {
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name= "increment", strategy= "increment")
-    @Column(name = "id", length = 6, nullable = false)
+    @Column(name = "characteristic_id", length = 6, nullable = false)
     public long getID() {
         return ID;
     }
 
     public void setID(long ID) {
         this.ID = ID;
-    }
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @NotNull
-    @JoinColumn(name = "product_id")
-    public Product getProduct() {
-        return product;
     }
 
     @NotNull
@@ -117,10 +109,6 @@ public class Characteristic {
 
     public void setUltrabook(boolean ultrabook) {
         this.isUltrabook = ultrabook;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     @NotNull
