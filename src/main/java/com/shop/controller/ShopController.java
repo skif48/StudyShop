@@ -1,5 +1,7 @@
 package com.shop.controller;
 
+import com.shop.entity.Attribute;
+import com.shop.entity.AttributeValue;
 import com.shop.entity.Characteristic;
 import com.shop.utils.Tools;
 import com.shop.entity.Product;
@@ -88,6 +90,7 @@ public class ShopController {
             return new ResponseEntity<>("requested uuid is not valid: " + uuid.toString(), HttpStatus.BAD_REQUEST);
     }
 
+    @Deprecated
     @RequestMapping(value = "/characteristic", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity putCharacteristic(@RequestBody String characteristicJSON){
@@ -97,6 +100,28 @@ public class ShopController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception exc){
             return new ResponseEntity<>(exc.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/attribute", method = RequestMethod.POST)
+    public ResponseEntity putAttribute(@RequestBody String attributeJSON){
+        try{
+            Attribute attribute = (Attribute) Tools.parseAttributeFromJSON(attributeJSON);
+            service.addAttribute(attribute);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception exc){
+            return new ResponseEntity<>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/attribute/{name}", method = RequestMethod.POST)
+    public ResponseEntity putAttributeValue(@PathVariable(value = "name") String attributeName, @RequestParam(value = "uuid") UUID uuid, @RequestBody String valueJSON){
+        try{
+            AttributeValue attributeValue = (AttributeValue) Tools.parseAttributeValueFromJSON(valueJSON);
+            service.addAttributeValue(attributeValue, uuid, attributeName);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception exc){
+            return new ResponseEntity<>(exc.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

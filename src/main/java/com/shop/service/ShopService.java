@@ -1,7 +1,11 @@
 package com.shop.service;
 
+import com.shop.entity.Attribute;
+import com.shop.entity.AttributeValue;
 import com.shop.entity.Characteristic;
 import com.shop.entity.Product;
+import com.shop.repository.AttributeRepository;
+import com.shop.repository.AttributeValueRepository;
 import com.shop.repository.CharacteristicRepository;
 import com.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,12 @@ public class ShopService {
 
     @Autowired
     private CharacteristicRepository characteristicRepository;
+
+    @Autowired
+    private AttributeRepository attributeRepository;
+
+    @Autowired
+    private AttributeValueRepository attributeValueRepository;
 
     public ShopService() {
     }
@@ -65,5 +75,23 @@ public class ShopService {
 
     public void addCharacteristicsToProduct(Characteristic characteristic){
         characteristicRepository.save(characteristic);
+    }
+
+    public void addAttribute(Attribute attribute){
+        attributeRepository.save(attribute);
+    }
+
+    public void addAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
+        attributeValue = setUpAttributeValue(attributeValue, uuid, attributeName);
+        attributeValueRepository.save(attributeValue);
+    }
+
+    private AttributeValue setUpAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
+        Product product = productRepository.findByUuid(uuid.toString());
+        attributeValue.setProduct(product);
+        Attribute attribute = attributeRepository.findByName(attributeName);
+        attributeValue.setAttribute(attribute);
+
+        return attributeValue;
     }
 }

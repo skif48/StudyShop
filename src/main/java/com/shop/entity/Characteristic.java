@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "characteristics")
+@Deprecated
 public class Characteristic {
     private long ID;
     private String uuid;
