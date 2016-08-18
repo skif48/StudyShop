@@ -12,25 +12,18 @@ import java.util.UUID;
 @Entity
 @Table(name = "products")
 public class Product {
-
     private long ID;
-
     private String uuid;
-
     private Type type;
-
     private String label;
-
-    private Characteristic characteristic;
 
     public Product() {
     }
 
-    public Product(UUID uuid, Type type, String label, Characteristic characteristic) {
+    public Product(UUID uuid, Type type, String label) {
         this.uuid = uuid.toString();
         this.type = type;
         this.label = label;
-        this.characteristic = characteristic;
     }
 
     @Id
@@ -59,16 +52,6 @@ public class Product {
     @NotNull
     public String getLabel() {
         return label;
-    }
-
-    @OneToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "characteristic_foreign")
-    public Characteristic getCharacteristic() {
-        return characteristic;
-    }
-
-    public void setCharacteristic(Characteristic characteristic) {
-        this.characteristic = characteristic;
     }
 
     public void setID(long ID) {

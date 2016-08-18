@@ -2,8 +2,8 @@ package com.shop.controller;
 
 import com.shop.entity.Attribute;
 import com.shop.entity.AttributeValue;
-import com.shop.entity.Characteristic;
 import com.shop.service.ProductInfo;
+import com.shop.service.ServiceResponse;
 import com.shop.utils.Tools;
 import com.shop.entity.Product;
 import com.shop.service.ShopService;
@@ -12,8 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -26,21 +25,13 @@ public class ShopController {
 
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity putProduct(@RequestBody String productJSON){
-        Product product = null;
+    public ResponseEntity putProduct(@RequestBody Product product){
+        ServiceResponse response = service.putProduct(product);
 
-        try {
-            product = (Product) Tools.parseProductFromJSON(productJSON);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        try{
-            service.putProduct(product);
+        if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } else{
+            return new ResponseEntity<>(response.getException(), HttpStatus.OK);
         }
     }
 
@@ -48,33 +39,38 @@ public class ShopController {
     @ResponseBody
     public ResponseEntity getProduct(@RequestParam(value = "uuid") UUID uuid){
         if(Tools.isValidUUID(uuid.toString())){
-            try {
-                //Product product = service.getProduct(uuid);
-                ProductInfo productInfo = service.getProductFullInfo(uuid);
+            //Product product = service.getProduct(uuid);
+            ServiceResponse response = service.getProductFullInfo(uuid);
+            if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
+                ProductInfo productInfo = (ProductInfo) response.getData();
                 return new ResponseEntity<>(productInfo, HttpStatus.OK);
-            } catch (Exception exc){
-                return new ResponseEntity<>(exc.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            } else{
+                return new ResponseEntity<>(response.getException(), HttpStatus.OK);
             }
-
         }
-
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity getAllProducts(){
-        return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
+        ServiceResponse response = service.getAllProducts();
+        if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
+            Collection<Product> products = (Collection<Product>) response.getData();
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(response.getException(), HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity deleteAllProducts(){
-        try {
-            service.deleteAllProducts();
-            return new ResponseEntity<>("all products successfully deleted from DB",HttpStatus.OK);
-        } catch (Exception exc){
-            return new ResponseEntity<>(exc.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        ServiceResponse response = service.deleteAllProducts();
+        if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(response.getException(), HttpStatus.OK);
         }
     }
 
@@ -82,49 +78,34 @@ public class ShopController {
     @ResponseBody
     public ResponseEntity deleteProduct(@RequestParam(value = "uuid") UUID uuid){
         if(Tools.isValidUUID(uuid.toString())) {
-            try {
-                service.deleteProductByUUID(uuid);
-                return new ResponseEntity<>("successfully deleted product with uuid: " + uuid.toString(), HttpStatus.OK);
-            } catch (Exception exc){
-                exc.printStackTrace();
-                return new ResponseEntity<>(exc.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            ServiceResponse response = service.deleteProductByUUID(uuid);
+            if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else{
+                return new ResponseEntity<>(response.getException(), HttpStatus.OK);
             }
+
         } else
             return new ResponseEntity<>("requested uuid is not valid: " + uuid.toString(), HttpStatus.BAD_REQUEST);
     }
 
-    @Deprecated
-    @RequestMapping(value = "/characteristic", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity putCharacteristic(@RequestBody String characteristicJSON){
-        try{
-            Characteristic characteristic = (Characteristic) Tools.parseCharacteristicFromJSON(characteristicJSON);
-            service.addCharacteristicsToProduct(characteristic);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception exc){
-            return new ResponseEntity<>(exc.toString(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @RequestMapping(value = "/attribute", method = RequestMethod.POST)
-    public ResponseEntity putAttribute(@RequestBody String attributeJSON){
-        try{
-            Attribute attribute = (Attribute) Tools.parseAttributeFromJSON(attributeJSON);
-            service.addAttribute(attribute);
+    public ResponseEntity putAttribute(@RequestBody Attribute attribute){
+        ServiceResponse response = service.addAttribute(attribute);
+        if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception exc){
-            return new ResponseEntity<>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+        } else{
+            return new ResponseEntity<>(response.getException(), HttpStatus.OK);
         }
     }
 
     @RequestMapping(value = "/attribute/{name}", method = RequestMethod.POST)
-    public ResponseEntity putAttributeValue(@PathVariable(value = "name") String attributeName, @RequestParam(value = "uuid") UUID uuid, @RequestBody String valueJSON){
-        try{
-            AttributeValue attributeValue = (AttributeValue) Tools.parseAttributeValueFromJSON(valueJSON);
-            service.addAttributeValue(attributeValue, uuid, attributeName);
+    public ResponseEntity putAttributeValue(@PathVariable(value = "name") String attributeName, @RequestParam(value = "uuid") UUID uuid, @RequestBody AttributeValue attributeValue){
+        ServiceResponse response = service.addAttributeValue(attributeValue, uuid, attributeName);;
+        if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception exc){
-            return new ResponseEntity<>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+        } else{
+            return new ResponseEntity<>(response.getException(), HttpStatus.OK);
         }
     }
 }

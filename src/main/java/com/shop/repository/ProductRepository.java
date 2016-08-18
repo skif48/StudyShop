@@ -22,5 +22,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query( "select attr.name, attrval.value " +
             "from Product p, Attribute attr, AttributeValue attrval " +
             "where attrval.product = p.ID and attrval.attribute = attr.attributeID and p.uuid = :uuid")
-    List<Object[]> info(@Param("uuid") String uuid);
+    List<Object[]> getFullInfoByUuid(@Param("uuid") String uuid);
 }

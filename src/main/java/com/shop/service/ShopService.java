@@ -2,16 +2,15 @@ package com.shop.service;
 
 import com.shop.entity.Attribute;
 import com.shop.entity.AttributeValue;
-import com.shop.entity.Characteristic;
 import com.shop.entity.Product;
+import com.shop.error.ErrorCode;
+import com.shop.error.ServiceException;
 import com.shop.repository.AttributeRepository;
 import com.shop.repository.AttributeValueRepository;
-import com.shop.repository.CharacteristicRepository;
 import com.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,9 +23,6 @@ public class ShopService {
     private ProductRepository productRepository;
 
     @Autowired
-    private CharacteristicRepository characteristicRepository;
-
-    @Autowired
     private AttributeRepository attributeRepository;
 
     @Autowired
@@ -35,71 +31,137 @@ public class ShopService {
     public ShopService() {
     }
 
-    public void putProduct(Product product) {
-        productRepository.save(product);
-    }
-
-    public Product getProduct(UUID uuid) {
-        Product product = new Product();
+    public ServiceResponse putProduct(Product product) {
+        ServiceResponse response = new ServiceResponse();
         try {
-            System.out.println(uuid.toString());
-            product = productRepository.findByUuid(uuid.toString());
-            if (product == null) {
-                product = new Product();
-            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            return product;
-        }
-
-        return product;
-    }
-
-    public ProductInfo getProductFullInfo(UUID uuid){
-        ProductInfo productInfo = new ProductInfo();
-        try{
-            List<Object[]> info = productRepository.info(uuid.toString());
-            productInfo = new ProductInfo();
-            productInfo.manageAttributes(info);
-            productInfo.setProduct(productRepository.findByUuid(uuid.toString()));
+            productRepository.save(product);
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
         } catch (Exception exc){
             exc.printStackTrace();
-            return productInfo;
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
         }
-
-        return productInfo;
     }
 
-    public Collection<Product> getAllProducts() {
-        Iterable<Product> products = null;
+    public ServiceResponse getProduct(UUID uuid) {
+        ServiceResponse response = new ServiceResponse();
         try {
-            products = productRepository.findAll();
+            Product product = productRepository.findByUuid(uuid.toString());
+            if(product == null){
+                response.setException(new ServiceException(ErrorCode.NO_SUCH_PRODUCT, "no product with following uuid is found in database: " + uuid.toString(), null));
+                response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+                return response;
+            }
+            response.setData(product);
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
         } catch (Exception exc) {
             exc.printStackTrace();
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
+        }
+    }
+
+    public ServiceResponse getProductFullInfo(UUID uuid){
+        ServiceResponse response = new ServiceResponse();
+        try{
+            List<Object[]> info = productRepository.getFullInfoByUuid(uuid.toString());
+            if(info == null || info.isEmpty()){
+                String message = "something went wrong with obtaining attributes of product with the following UUID: " + uuid.toString() + "; ";
+                response.setException(new ServiceException(ErrorCode.NO_ATTRIBUTES_FOR_PRODUCT, message, null));
+                response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+                return response;
+            }
+            ProductInfo productInfo = new ProductInfo();
+            productInfo.manageAttributes(info);
+            Product product = productRepository.findByUuid(uuid.toString());
+            if(product == null){
+                String message = "no product found with the following UUID: " + uuid.toString();
+                response.setException(new ServiceException(ErrorCode.NO_SUCH_PRODUCT, message, null));
+                response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+                return response;
+            }
+            productInfo.setProduct(product);
+            response.setData(productInfo);
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
+        } catch (Exception exc){
+            exc.printStackTrace();
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
+        }
+    }
+
+    public ServiceResponse getAllProducts() {
+        ServiceResponse response = new ServiceResponse();
+        try {
+            Iterable<Product> products = productRepository.findAll();
+            response.setData(products);
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
+        } catch (Exception exc) {
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
+        }
+    }
+
+    public ServiceResponse deleteProductByUUID(UUID uuid) {
+        ServiceResponse response = new ServiceResponse();
+        try{
+            productRepository.deleteByUuid(uuid.toString());
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
+        } catch (Exception exc){
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
+        }
+    }
+
+    public ServiceResponse deleteAllProducts(){
+        ServiceResponse response = new ServiceResponse();
+        try{
+            productRepository.deleteAll();
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
+        } catch (Exception exc){
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
+        }
+    }
+
+    public ServiceResponse addAttribute(Attribute attribute){
+        ServiceResponse response = new ServiceResponse();
+        try{
+            attributeRepository.save(attribute);
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
+        } catch (Exception exc){
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
+        }
+    }
+
+    public ServiceResponse addAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
+        ServiceResponse response = new ServiceResponse();
+        try{
+            attributeValue = setUpAttributeValue(attributeValue, uuid, attributeName);
+            attributeValueRepository.save(attributeValue);
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
+        } catch (Exception exc){
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
         }
 
-        return (Collection<Product>) products;
-    }
-
-    public void deleteProductByUUID(UUID uuid) {
-        productRepository.deleteByUuid(uuid.toString());
-    }
-
-    public void deleteAllProducts(){
-        productRepository.deleteAll();
-    }
-
-    public void addCharacteristicsToProduct(Characteristic characteristic){
-        characteristicRepository.save(characteristic);
-    }
-
-    public void addAttribute(Attribute attribute){
-        attributeRepository.save(attribute);
-    }
-
-    public void addAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
-        attributeValue = setUpAttributeValue(attributeValue, uuid, attributeName);
-        attributeValueRepository.save(attributeValue);
     }
 
     private AttributeValue setUpAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
