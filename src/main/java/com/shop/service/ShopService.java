@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -52,6 +53,21 @@ public class ShopService {
         }
 
         return product;
+    }
+
+    public ProductInfo getProductFullInfo(UUID uuid){
+        ProductInfo productInfo = new ProductInfo();
+        try{
+            List<Object[]> info = productRepository.info(uuid.toString());
+            productInfo = new ProductInfo();
+            productInfo.manageAttributes(info);
+            productInfo.setProduct(productRepository.findByUuid(uuid.toString()));
+        } catch (Exception exc){
+            exc.printStackTrace();
+            return productInfo;
+        }
+
+        return productInfo;
     }
 
     public Collection<Product> getAllProducts() {

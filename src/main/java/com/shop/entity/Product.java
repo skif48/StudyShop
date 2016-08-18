@@ -11,10 +11,6 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "products")
-/*@NamedQuery(name = "productsAttributesByUUID",
-        query = "select p.uuid, attr.name, attrval.value " +
-                "from products p, attributes attr, attributes_value attrval " +
-                "where attrval.product_id = p.product_id and attrval.attribute_id = attr.attribute_id and p.uuid = :uuid") */
 public class Product {
 
     private long ID;

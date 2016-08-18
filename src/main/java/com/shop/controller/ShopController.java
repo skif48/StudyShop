@@ -3,6 +3,7 @@ package com.shop.controller;
 import com.shop.entity.Attribute;
 import com.shop.entity.AttributeValue;
 import com.shop.entity.Characteristic;
+import com.shop.service.ProductInfo;
 import com.shop.utils.Tools;
 import com.shop.entity.Product;
 import com.shop.service.ShopService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -22,7 +24,7 @@ public class ShopController {
     @Autowired
     private ShopService service;
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity putProduct(@RequestBody String productJSON){
         Product product = null;
@@ -42,13 +44,14 @@ public class ShopController {
         }
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/product", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity getProduct(@RequestHeader("ProductID") UUID uuid){
+    public ResponseEntity getProduct(@RequestParam(value = "uuid") UUID uuid){
         if(Tools.isValidUUID(uuid.toString())){
             try {
-                Product product = service.getProduct(uuid);
-                return new ResponseEntity<>(product, HttpStatus.OK);
+                //Product product = service.getProduct(uuid);
+                ProductInfo productInfo = service.getProductFullInfo(uuid);
+                return new ResponseEntity<>(productInfo, HttpStatus.OK);
             } catch (Exception exc){
                 return new ResponseEntity<>(exc.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -75,9 +78,9 @@ public class ShopController {
         }
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/product", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity deleteProduct(@RequestHeader("ProductID") UUID uuid){
+    public ResponseEntity deleteProduct(@RequestParam(value = "uuid") UUID uuid){
         if(Tools.isValidUUID(uuid.toString())) {
             try {
                 service.deleteProductByUUID(uuid);
