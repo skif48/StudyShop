@@ -2,6 +2,7 @@ package com.shop.controller;
 
 import com.shop.entity.Attribute;
 import com.shop.entity.AttributeValue;
+import com.shop.entity.ProductType;
 import com.shop.service.ProductInfo;
 import com.shop.service.ServiceResponse;
 import com.shop.utils.Tools;
@@ -25,9 +26,8 @@ public class ShopController {
 
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity putProduct(@RequestBody Product product){
-        ServiceResponse response = service.putProduct(product);
-
+    public ResponseEntity putProduct(@RequestBody Product product, @RequestHeader(name = "type") String type){
+        ServiceResponse response = service.putProduct(product, type);
         if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
             return new ResponseEntity<>(HttpStatus.OK);
         } else{
@@ -100,8 +100,30 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/attribute/{name}", method = RequestMethod.POST)
-    public ResponseEntity putAttributeValue(@PathVariable(value = "name") String attributeName, @RequestParam(value = "uuid") UUID uuid, @RequestBody AttributeValue attributeValue){
-        ServiceResponse response = service.addAttributeValue(attributeValue, uuid, attributeName);;
+    public ResponseEntity putAttributeValue(@PathVariable(value = "name") String attributeName,
+                                            @RequestParam(value = "uuid") UUID uuid,
+                                            @RequestBody AttributeValue attributeValue){
+        ServiceResponse response = service.addAttributeValue(attributeValue, uuid, attributeName);
+        if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(response.getException(), HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/type/{typeName}", method = RequestMethod.GET)
+    public ResponseEntity getProductsOfType(@PathVariable(value = "typeName") String typeName){
+        ServiceResponse response = service.getProductsOfType(new ProductType(typeName));
+        if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
+            return new ResponseEntity<>(response.getData(), HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(response.getException(), HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/addType", method = RequestMethod.POST)
+    public ResponseEntity addNewType(@RequestBody ProductType type){
+        ServiceResponse response = service.addType(type);
         if(response.getStatus() == ServiceResponse.ServiceStatus.SUCCESS){
             return new ResponseEntity<>(HttpStatus.OK);
         } else{

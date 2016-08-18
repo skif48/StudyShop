@@ -1,6 +1,7 @@
 package com.shop.repository;
 
 import com.shop.entity.Product;
+import com.shop.entity.ProductType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,6 +22,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query( "select attr.name, attrval.value " +
             "from Product p, Attribute attr, AttributeValue attrval " +
-            "where attrval.product = p.ID and attrval.attribute = attr.attributeID and p.uuid = :uuid")
+            "where attrval.product = p.productID and attrval.attribute = attr.attributeID and p.uuid = :uuid")
     List<Object[]> getFullInfoByUuid(@Param("uuid") String uuid);
+
+    @Query("select p from Product p where p.type = :type")
+    List<Product> findByType(@Param("type") ProductType type);
 }

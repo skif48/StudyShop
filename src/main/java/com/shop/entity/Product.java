@@ -12,15 +12,15 @@ import java.util.UUID;
 @Entity
 @Table(name = "products")
 public class Product {
-    private long ID;
+    private long productID;
     private String uuid;
-    private Type type;
+    private ProductType type;
     private String label;
 
     public Product() {
     }
 
-    public Product(UUID uuid, Type type, String label) {
+    public Product(UUID uuid, ProductType type, String label) {
         this.uuid = uuid.toString();
         this.type = type;
         this.label = label;
@@ -31,8 +31,8 @@ public class Product {
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name= "increment", strategy= "increment")
     @Column(name = "product_id", length = 6, nullable = false)
-    public long getID() {
-        return ID;
+    public long getProductID() {
+        return productID;
     }
 
     @Column(name = "uuid")
@@ -41,10 +41,9 @@ public class Product {
         return uuid.toString();
     }
 
-    @Column(name = "type")
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    public Type getType() {
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "productType_id")
+    public ProductType getType() {
         return type;
     }
 
@@ -54,11 +53,11 @@ public class Product {
         return label;
     }
 
-    public void setID(long ID) {
-        this.ID = ID;
+    public void setProductID(long productID) {
+        this.productID = productID;
     }
 
-    public void setType(Type type) {
+    public void setType(ProductType type) {
         this.type = type;
     }
 

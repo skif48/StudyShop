@@ -3,11 +3,13 @@ package com.shop.service;
 import com.shop.entity.Attribute;
 import com.shop.entity.AttributeValue;
 import com.shop.entity.Product;
+import com.shop.entity.ProductType;
 import com.shop.error.ErrorCode;
 import com.shop.error.ServiceException;
 import com.shop.repository.AttributeRepository;
 import com.shop.repository.AttributeValueRepository;
 import com.shop.repository.ProductRepository;
+import com.shop.repository.ProductTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +30,17 @@ public class ShopService {
     @Autowired
     private AttributeValueRepository attributeValueRepository;
 
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
+
     public ShopService() {
     }
 
-    public ServiceResponse putProduct(Product product) {
+    public ServiceResponse putProduct(Product product, String type) {
         ServiceResponse response = new ServiceResponse();
         try {
+            ProductType productType = productTypeRepository.findByTypeName(type);
+            product.setType(productType);
             productRepository.save(product);
             response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
             return response;
@@ -171,5 +178,32 @@ public class ShopService {
         attributeValue.setAttribute(attribute);
 
         return attributeValue;
+    }
+
+    public ServiceResponse getProductsOfType(ProductType type){
+        ServiceResponse response = new ServiceResponse();
+        try {
+            List<Product> products = productRepository.findByType(type);
+            response.setData(products);
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
+        } catch (Exception exc) {
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
+        }
+    }
+
+    public ServiceResponse addType(ProductType type){
+        ServiceResponse response = new ServiceResponse();
+        try {
+            productTypeRepository.save(type);
+            response.setStatus(ServiceResponse.ServiceStatus.SUCCESS);
+            return response;
+        } catch (Exception exc) {
+            response.setStatus(ServiceResponse.ServiceStatus.FAILURE);
+            response.setException(exc);
+            return response;
+        }
     }
 }
