@@ -13,9 +13,7 @@ import com.shop.repository.ProductTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Vladyslav Usenko on 11.08.2016.
@@ -68,6 +66,10 @@ public class ShopService {
         attributeRepository.save(attribute);
     }
 
+    public Attribute getAttributeByName(String name){
+        return attributeRepository.findByName(name);
+    }
+
     public void addAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
         attributeValue = setUpAttributeValue(attributeValue, uuid, attributeName);
         attributeValueRepository.save(attributeValue);
@@ -76,7 +78,7 @@ public class ShopService {
     private AttributeValue setUpAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
         Product product = productRepository.findByUuid(uuid.toString());
         attributeValue.setProduct(product);
-        Attribute attribute = attributeRepository.findByName(attributeName);
+        Attribute attribute = getAttributeByName(attributeName);
         attributeValue.setAttribute(attribute);
 
         return attributeValue;
@@ -92,5 +94,18 @@ public class ShopService {
 
     public void addType(ProductType type){
         productTypeRepository.save(type);
+    }
+
+    public void matchTypeAndAttribute(ProductType productType, Attribute attribute){
+        Set<Attribute> set = new HashSet<>();
+        set.addAll(productType.getAttributes());
+        set.add(attribute);
+        productType.setAttributes(set);
+        productTypeRepository.save(productType);
+    }
+
+    public Set<Attribute> getAttributesOfType(String productTypeName){
+        ProductType productType = productTypeRepository.findByTypeName(productTypeName);
+        return productType.getAttributes();
     }
 }

@@ -17,6 +17,7 @@ public class ProductType {
     private String name;
     @JsonIgnore
     private Set<Product> productSet;
+    private Set<Attribute> attributes;
 
     public ProductType() {
     }
@@ -55,5 +56,15 @@ public class ProductType {
 
     public void setProductSet(Set<Product> productSet) {
         this.productSet = productSet;
+    }
+
+    @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="productType_attribute", joinColumns=@JoinColumn(name="productType_id"), inverseJoinColumns=@JoinColumn(name="attribute_id"))
+    public Set<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<Attribute> attributes) {
+        this.attributes = attributes;
     }
 }

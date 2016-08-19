@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -95,5 +96,19 @@ public class ShopController {
     public ResponseEntity addNewType(@RequestBody ProductType type){
         service.addType(type);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/matchTypeAndAttribute", method = RequestMethod.PUT)
+    public ResponseEntity matchTypeAndAttribute(@RequestParam(value = "typeName") String typeName, @RequestHeader(value = "attributeName") String attributeName){
+        ProductType productType = service.getTypeByName(typeName);
+        Attribute attribute = service.getAttributeByName(attributeName);
+        service.matchTypeAndAttribute(productType, attribute);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/attributesOfType", method = RequestMethod.GET)
+    public ResponseEntity getAttributesOfType(@RequestParam(value = "typeName") String typeName){
+        Set<Attribute> attributes = service.getAttributesOfType(typeName);
+        return new ResponseEntity<>(attributes, HttpStatus.OK);
     }
 }
