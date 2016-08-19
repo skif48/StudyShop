@@ -53,7 +53,7 @@ public class ShopService {
     public ProductInfo getProductFullInfo(UUID uuid){
         ProductInfo productInfo = new ProductInfo();
         try{
-            List<Object[]> info = productRepository.info(uuid.toString());
+            List<Object[]> info = productRepository.getFullInfoByUuid(uuid.toString());
             productInfo = new ProductInfo();
             productInfo.manageAttributes(info);
             productInfo.setProduct(productRepository.findByUuid(uuid.toString()));
