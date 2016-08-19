@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Simple Shop Simulation</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- CSS -->
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <script src="index.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Simple Shop Simulation</h1>
+        </div>
+    </div>
+    <div class="container">
+        <form class="form-horizontal">
+            <fieldset>
+                <!-- Form Name -->
+                <legend>Login</legend>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="textinput">Login: </label>
+                    <div class="col-md-4">
+                        <input id="textinput" name="textinput" type="text" placeholder="login" class="form-control input-md">
+                    </div>
+                </div>
+                <!-- Password input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="passwordinput">Password:</label>
+                    <div class="col-md-4">
+                        <input id="passwordinput" name="passwordinput" type="password" placeholder="password" class="form-control input-md">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-info" value="Submit Button" id="submitButton" onclick="sendRequest()">
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    </body>
+</html>

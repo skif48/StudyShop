@@ -5,6 +5,7 @@ import com.shop.entity.AttributeValue;
 import com.shop.entity.ProductType;
 import com.shop.service.ProductInfo;
 import com.shop.service.ServiceResponse;
+import com.shop.service.UserLogin;
 import com.shop.utils.Tools;
 import com.shop.entity.Product;
 import com.shop.service.ShopService;
