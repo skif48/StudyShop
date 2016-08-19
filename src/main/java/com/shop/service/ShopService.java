@@ -2,11 +2,9 @@ package com.shop.service;
 
 import com.shop.entity.Attribute;
 import com.shop.entity.AttributeValue;
-import com.shop.entity.Characteristic;
 import com.shop.entity.Product;
 import com.shop.repository.AttributeRepository;
 import com.shop.repository.AttributeValueRepository;
-import com.shop.repository.CharacteristicRepository;
 import com.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +20,6 @@ import java.util.UUID;
 public class ShopService {
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private CharacteristicRepository characteristicRepository;
 
     @Autowired
     private AttributeRepository attributeRepository;
@@ -87,10 +82,6 @@ public class ShopService {
 
     public void deleteAllProducts(){
         productRepository.deleteAll();
-    }
-
-    public void addCharacteristicsToProduct(Characteristic characteristic){
-        characteristicRepository.save(characteristic);
     }
 
     public void addAttribute(Attribute attribute){

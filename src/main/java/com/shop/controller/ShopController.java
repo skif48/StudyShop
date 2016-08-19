@@ -2,7 +2,6 @@ package com.shop.controller;
 
 import com.shop.entity.Attribute;
 import com.shop.entity.AttributeValue;
-import com.shop.entity.Characteristic;
 import com.shop.service.ProductInfo;
 import com.shop.utils.Tools;
 import com.shop.entity.Product;
@@ -91,19 +90,6 @@ public class ShopController {
             }
         } else
             return new ResponseEntity<>("requested uuid is not valid: " + uuid.toString(), HttpStatus.BAD_REQUEST);
-    }
-
-    @Deprecated
-    @RequestMapping(value = "/characteristic", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity putCharacteristic(@RequestBody String characteristicJSON){
-        try{
-            Characteristic characteristic = (Characteristic) Tools.parseCharacteristicFromJSON(characteristicJSON);
-            service.addCharacteristicsToProduct(characteristic);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception exc){
-            return new ResponseEntity<>(exc.toString(), HttpStatus.BAD_REQUEST);
-        }
     }
 
     @RequestMapping(value = "/attribute", method = RequestMethod.POST)
