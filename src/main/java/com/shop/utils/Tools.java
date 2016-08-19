@@ -1,11 +1,5 @@
 package com.shop.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shop.entity.Attribute;
-import com.shop.entity.AttributeValue;
-import com.shop.entity.Product;
-
-import java.io.IOException;
 import java.util.UUID;
 
 /**
