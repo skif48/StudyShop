@@ -3,9 +3,13 @@ package com.shop.service;
 import com.shop.entity.Attribute;
 import com.shop.entity.AttributeValue;
 import com.shop.entity.Product;
+import com.shop.entity.ProductType;
+import com.shop.error.ErrorCode;
+import com.shop.error.ServiceException;
 import com.shop.repository.AttributeRepository;
 import com.shop.repository.AttributeValueRepository;
 import com.shop.repository.ProductRepository;
+import com.shop.repository.ProductTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,53 +31,29 @@ public class ShopService {
     @Autowired
     private AttributeValueRepository attributeValueRepository;
 
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
+
     public ShopService() {
     }
 
-    public void putProduct(Product product) {
+    public void putProduct(Product product, String type) {
+        ProductType productType = productTypeRepository.findByTypeName(type);
+        product.setType(productType);
         productRepository.save(product);
     }
 
-    public Product getProduct(UUID uuid) {
-        Product product = new Product();
-        try {
-            System.out.println(uuid.toString());
-            product = productRepository.findByUuid(uuid.toString());
-            if (product == null) {
-                product = new Product();
-            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            return product;
-        }
-
-        return product;
-    }
-
     public ProductInfo getProductFullInfo(UUID uuid){
+        List<Object[]> info = productRepository.getFullInfoByUuid(uuid.toString());
         ProductInfo productInfo = new ProductInfo();
-        try{
-            List<Object[]> info = productRepository.getFullInfoByUuid(uuid.toString());
-            productInfo = new ProductInfo();
-            productInfo.manageAttributes(info);
-            productInfo.setProduct(productRepository.findByUuid(uuid.toString()));
-        } catch (Exception exc){
-            exc.printStackTrace();
-            return productInfo;
-        }
-
+        productInfo.manageAttributes(info);
+        Product product = productRepository.findByUuid(uuid.toString());
+        productInfo.setProduct(product);
         return productInfo;
     }
 
     public Collection<Product> getAllProducts() {
-        Iterable<Product> products = null;
-        try {
-            products = productRepository.findAll();
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-
-        return (Collection<Product>) products;
+        return productRepository.findAll();
     }
 
     public void deleteProductByUUID(UUID uuid) {
@@ -100,5 +80,17 @@ public class ShopService {
         attributeValue.setAttribute(attribute);
 
         return attributeValue;
+    }
+
+    public ProductType getTypeByName(String name){
+        return productTypeRepository.findByTypeName(name);
+    }
+
+    public List<Product> getProductsOfType(ProductType type){
+        return productRepository.findByType(type);
+    }
+
+    public void addType(ProductType type){
+        productTypeRepository.save(type);
     }
 }
