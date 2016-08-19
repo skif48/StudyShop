@@ -20,20 +20,4 @@ public class Tools {
             return false;
         }
     }
-
-    public static Object parseProductFromJSON(String JSON) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(JSON, Product.class);
-    }
-
-    public static Object parseAttributeFromJSON(String JSON) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(JSON, Attribute.class);
-    }
-
-    public static Object parseAttributeValueFromJSON(String JSON) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(JSON, AttributeValue.class);
-    }
-
 }

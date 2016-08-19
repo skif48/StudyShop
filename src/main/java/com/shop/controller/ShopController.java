@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,16 +23,7 @@ public class ShopController {
 
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity putProduct(@RequestBody String productJSON){
-        Product product = null;
-
-        try {
-            product = (Product) Tools.parseProductFromJSON(productJSON);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
+    public ResponseEntity putProduct(@RequestBody Product product){
         try{
             service.putProduct(product);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -48,7 +37,6 @@ public class ShopController {
     public ResponseEntity getProduct(@RequestParam(value = "uuid") UUID uuid){
         if(Tools.isValidUUID(uuid.toString())){
             try {
-                //Product product = service.getProduct(uuid);
                 ProductInfo productInfo = service.getProductFullInfo(uuid);
                 return new ResponseEntity<>(productInfo, HttpStatus.OK);
             } catch (Exception exc){
@@ -93,9 +81,8 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/attribute", method = RequestMethod.POST)
-    public ResponseEntity putAttribute(@RequestBody String attributeJSON){
+    public ResponseEntity putAttribute(@RequestBody Attribute attribute){
         try{
-            Attribute attribute = (Attribute) Tools.parseAttributeFromJSON(attributeJSON);
             service.addAttribute(attribute);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception exc){
@@ -104,9 +91,8 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/attribute/{name}", method = RequestMethod.POST)
-    public ResponseEntity putAttributeValue(@PathVariable(value = "name") String attributeName, @RequestParam(value = "uuid") UUID uuid, @RequestBody String valueJSON){
+    public ResponseEntity putAttributeValue(@PathVariable(value = "name") String attributeName, @RequestParam(value = "uuid") UUID uuid, @RequestBody AttributeValue attributeValue){
         try{
-            AttributeValue attributeValue = (AttributeValue) Tools.parseAttributeValueFromJSON(valueJSON);
             service.addAttributeValue(attributeValue, uuid, attributeName);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception exc){
