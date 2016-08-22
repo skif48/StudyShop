@@ -1,0 +1,12 @@
+.jumbotron {
+    vertical-align: middle;
+    text-align    : center;
+}
+
+#emailInput {
+    margin : auto
+}
+
+#passwordInput {
+    margin : auto
+}
