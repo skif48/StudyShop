@@ -77,4 +77,27 @@ public class Product {
                 ", label='" + label + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        if (productID != product.productID) return false;
+        if (!uuid.equals(product.uuid)) return false;
+        if (!type.equals(product.type)) return false;
+        return label.equals(product.label);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (productID ^ (productID >>> 32));
+        result = 31 * result + uuid.hashCode();
+        result = 31 * result + type.hashCode();
+        result = 31 * result + label.hashCode();
+        return result;
+    }
 }
