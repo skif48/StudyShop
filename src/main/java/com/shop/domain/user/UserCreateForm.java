@@ -1,5 +1,6 @@
-package com.shop.entity;
+package com.shop.domain.user;
 
+import com.shop.domain.user.Role;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;

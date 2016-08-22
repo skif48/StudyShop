@@ -1,6 +1,6 @@
-package com.shop.repository;
+package com.shop.repository.products;
 
-import com.shop.entity.Attribute;
+import com.shop.domain.entity.Attribute;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

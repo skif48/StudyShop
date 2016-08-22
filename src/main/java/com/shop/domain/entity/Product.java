@@ -1,4 +1,4 @@
-package com.shop.entity;
+package com.shop.domain.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;

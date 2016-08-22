@@ -1,9 +1,15 @@
-package com.shop.service;
+package com.shop.service.shopServices;
 
-import com.shop.entity.*;
-import com.shop.error.ErrorCode;
-import com.shop.error.ServiceException;
-import com.shop.repository.*;
+import com.shop.domain.entity.*;
+import com.shop.domain.user.Role;
+import com.shop.domain.user.User;
+import com.shop.domain.user.UserCreateForm;
+import com.shop.repository.products.AttributeRepository;
+import com.shop.repository.products.AttributeValueRepository;
+import com.shop.repository.products.ProductRepository;
+import com.shop.repository.products.ProductTypeRepository;
+import com.shop.repository.users.UserRepository;
+import com.shop.service.userServices.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,9 +33,6 @@ public class ShopService {
 
     @Autowired
     private ProductTypeRepository productTypeRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     public ShopService() {
     }
@@ -106,30 +109,5 @@ public class ShopService {
     public Set<Attribute> getAttributesOfType(String productTypeName){
         ProductType productType = productTypeRepository.findByTypeName(productTypeName);
         return productType.getAttributes();
-    }
-
-    public Optional<User> getUserById(long id) {
-        return Optional.ofNullable(userRepository.findOne(id));
-    }
-
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findOneByEmail(email);
-    }
-
-    public Collection<User> getAllUsers() {
-        return userRepository.findAll(new Sort("email"));
-    }
-
-    public User create(UserCreateForm form) {
-        User user = new User();
-        user.setEmail(form.getEmail());
-        user.setPasswordHash(new BCryptPasswordEncoder().encode(form.getPassword()));
-        user.setRole(form.getRole());
-        return userRepository.save(user);
-    }
-
-    public boolean canAccessUser(CurrentUser currentUser, Long userId) {
-        return currentUser != null
-                && (currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(userId));
     }
 }

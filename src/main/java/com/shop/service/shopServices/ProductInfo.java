@@ -1,6 +1,6 @@
-package com.shop.service;
+package com.shop.service.shopServices;
 
-import com.shop.entity.Product;
+import com.shop.domain.entity.Product;
 
 import java.util.HashMap;
 import java.util.List;

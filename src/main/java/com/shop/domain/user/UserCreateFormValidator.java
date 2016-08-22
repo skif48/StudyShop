@@ -1,6 +1,7 @@
-package com.shop.entity;
+package com.shop.domain.user;
 
-import com.shop.service.ShopService;
+import com.shop.service.shopServices.ShopService;
+import com.shop.service.userServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -11,11 +12,11 @@ import org.springframework.validation.Validator;
  */
 @Component
 public class UserCreateFormValidator implements Validator {
-    private final ShopService shopService;
+    private final UserService userService;
 
     @Autowired
-    public UserCreateFormValidator(ShopService shopService) {
-        this.shopService = shopService;
+    public UserCreateFormValidator(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class UserCreateFormValidator implements Validator {
     }
 
     private void validateEmail(Errors errors, UserCreateForm form) {
-        if (shopService.getUserByEmail(form.getEmail()).isPresent()) {
+        if (userService.getUserByEmail(form.getEmail()).isPresent()) {
             errors.reject("email.exists", "User with this email already exists");
         }
     }

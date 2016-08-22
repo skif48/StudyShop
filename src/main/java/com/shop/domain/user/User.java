@@ -1,4 +1,4 @@
-package com.shop.entity;
+package com.shop.domain.user;
 
 import javax.persistence.*;
 

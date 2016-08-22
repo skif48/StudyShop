@@ -1,4 +1,4 @@
-package com.shop.entity;
+package com.shop.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;

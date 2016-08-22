@@ -1,8 +1,8 @@
-package com.shop.service;
+package com.shop.service.userServices;
 
 
-import com.shop.entity.Role;
-import com.shop.entity.User;
+import com.shop.domain.user.Role;
+import com.shop.domain.user.User;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 /**

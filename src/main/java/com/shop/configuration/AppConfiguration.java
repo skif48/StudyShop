@@ -1,6 +1,7 @@
 package com.shop.configuration;
 
-import com.shop.service.ShopService;
+import com.shop.service.shopServices.ShopService;
+import com.shop.service.userServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +31,13 @@ public class AppConfiguration {
     private LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
     @Bean
-    public ShopService service(){
+    public ShopService shopService(){
         return new ShopService();
+    }
+
+    @Bean
+    public UserService userService() {
+        return new UserService();
     }
 
     @Bean

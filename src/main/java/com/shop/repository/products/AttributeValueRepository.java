@@ -1,6 +1,6 @@
-package com.shop.repository;
+package com.shop.repository.products;
 
-import com.shop.entity.AttributeValue;
+import com.shop.domain.entity.AttributeValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
