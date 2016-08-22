@@ -1,5 +1,6 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,7 +15,9 @@ import java.util.Set;
 public class ProductType {
     private long typeID;
     private String name;
+    @JsonIgnore
     private Set<Product> productSet;
+    private Set<Attribute> attributes;
 
     public ProductType() {
     }
@@ -53,5 +56,15 @@ public class ProductType {
 
     public void setProductSet(Set<Product> productSet) {
         this.productSet = productSet;
+    }
+
+    @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="productType_attribute", joinColumns=@JoinColumn(name="productType_id"), inverseJoinColumns=@JoinColumn(name="attribute_id"))
+    public Set<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<Attribute> attributes) {
+        this.attributes = attributes;
     }
 }

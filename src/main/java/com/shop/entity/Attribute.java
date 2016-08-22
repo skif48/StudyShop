@@ -1,5 +1,6 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,14 +15,15 @@ import java.util.Set;
 public class Attribute {
     private long attributeID;
     private String name;
-    private Set<AttributeValue> attributeSet;
+    @JsonIgnore
+    private Set<AttributeValue> attributeValueSet;
 
     public Attribute() {
     }
 
-    public Attribute(String name, Set<AttributeValue> attributeSet) {
+    public Attribute(String name, Set<AttributeValue> attributeValueSet) {
         this.name = name;
-        this.attributeSet = attributeSet;
+        this.attributeValueSet = attributeValueSet;
     }
 
     @Id
@@ -48,18 +50,18 @@ public class Attribute {
     }
 
     @OneToMany(mappedBy = "attributeValueID", cascade = CascadeType.ALL)
-    public Set<AttributeValue> getAttributeSet() {
-        return attributeSet;
+    public Set<AttributeValue> getAttributeValueSet() {
+        return attributeValueSet;
     }
 
-    public void setAttributeSet(Set<AttributeValue> attributeSet) {
-        this.attributeSet = attributeSet;
+    public void setAttributeValueSet(Set<AttributeValue> attributeValueSet) {
+        this.attributeValueSet = attributeValueSet;
     }
 
     @Override
     public String toString() {
         return "Attribute{" +
-                "attributeSet=" + attributeSet +
+                "attributeValueSet=" + attributeValueSet +
                 ", name='" + name + '\'' +
                 '}';
     }
