@@ -23,18 +23,22 @@ public class UserService {
     public UserService() {
     }
 
+    //TODO 22.08.2016 unit test
     public Optional<User> getUserById(long id) {
         return Optional.ofNullable(userRepository.findOne(id));
     }
 
+    //TODO 22.08.2016 unit test
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findOneByEmail(email);
     }
 
+    //TODO 22.08.2016 unit test
     public Collection<User> getAllUsers() {
         return userRepository.findAll(new Sort("email"));
     }
 
+    //TODO 22.08.2016 unit test
     public User create(UserCreateForm form) {
         User user = new User();
         user.setEmail(form.getEmail());
@@ -43,6 +47,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    //TODO 22.08.2016 unit test
     public boolean canAccessUser(CurrentUser currentUser, Long userId) {
         return currentUser != null
                 && (currentUser.getRole() == Role.ADMIN || currentUser.getId().equals(userId));
