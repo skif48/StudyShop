@@ -68,4 +68,27 @@ public class AttributeValue {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AttributeValue that = (AttributeValue) o;
+
+        if (attributeValueID != that.attributeValueID) return false;
+        if (!product.equals(that.product)) return false;
+        if (!attribute.equals(that.attribute)) return false;
+        return value.equals(that.value);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (attributeValueID ^ (attributeValueID >>> 32));
+        result = 31 * result + product.hashCode();
+        result = 31 * result + attribute.hashCode();
+        result = 31 * result + value.hashCode();
+        return result;
+    }
 }

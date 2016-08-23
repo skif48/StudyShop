@@ -44,6 +44,7 @@ public class UserService {
         user.setEmail(form.getEmail());
         user.setPasswordHash(new BCryptPasswordEncoder().encode(form.getPassword()));
         user.setRole(form.getRole());
+
         return userRepository.save(user);
     }
 

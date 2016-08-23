@@ -31,7 +31,7 @@ public class ShopController {
 
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity putProduct(@RequestBody Product product, @RequestHeader(name = "type") String type){
+    public ResponseEntity putProduct(@RequestBody Product product, @RequestHeader(name = "type") ProductType type){
         try{
             service.putProduct(product, type);
             return new ResponseEntity(HttpStatus.OK);
@@ -82,16 +82,16 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/attribute/{name}", method = RequestMethod.POST)
-    public ResponseEntity putAttributeValue(@PathVariable(value = "name") String attributeName,
+    public ResponseEntity putAttributeValue(@PathVariable(value = "name") Attribute attribute,
                                             @RequestParam(value = "uuid") UUID uuid,
                                             @RequestBody AttributeValue attributeValue){
-        service.addAttributeValue(attributeValue, uuid, attributeName);
+        service.addAttributeValue(attributeValue, uuid, attribute);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/type/{typeName}", method = RequestMethod.GET)
-    public ResponseEntity getProductsOfType(@PathVariable(value = "typeName") String typeName){
-        ProductType productType = service.getTypeByName(typeName);
+    public ResponseEntity getProductsOfType(@PathVariable(value = "typeName") ProductType type){
+        ProductType productType = service.getTypeByName(type.getName());
         List<Product> products = service.getProductsOfType(productType);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
@@ -103,10 +103,10 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/matchTypeAndAttribute", method = RequestMethod.PUT)
-    public ResponseEntity matchTypeAndAttribute(@RequestParam(value = "typeName") String typeName, @RequestHeader(value = "attributeName") String attributeName){
-        ProductType productType = service.getTypeByName(typeName);
-        Attribute attribute = service.getAttributeByName(attributeName);
-        service.matchTypeAndAttribute(productType, attribute);
+    public ResponseEntity matchTypeAndAttribute(@RequestParam(value = "typeName") ProductType type, @RequestHeader(value = "attributeName") Attribute attribute){
+        ProductType productType = service.getTypeByName(type.getName());
+        Attribute attributeByName = service.getAttributeByName(attribute.getName());
+        service.matchTypeAndAttribute(productType, attributeByName);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

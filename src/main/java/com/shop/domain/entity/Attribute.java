@@ -21,6 +21,10 @@ public class Attribute {
     public Attribute() {
     }
 
+    public Attribute(String name){
+        this.name = name;
+    }
+
     public Attribute(String name, Set<AttributeValue> attributeValueSet) {
         this.name = name;
         this.attributeValueSet = attributeValueSet;
@@ -64,5 +68,25 @@ public class Attribute {
                 "attributeValueSet=" + attributeValueSet +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Attribute attribute = (Attribute) o;
+
+        if (attributeID != attribute.attributeID) return false;
+        if (!name.equals(attribute.name)) return false;
+        return true;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (attributeID ^ (attributeID >>> 32));
+        result = 31 * result + name.hashCode();
+        return result;
     }
 }

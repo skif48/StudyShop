@@ -1,7 +1,10 @@
 package com.shop.service.shopServices;
 
+import com.shop.domain.entity.Attribute;
+import com.shop.domain.entity.AttributeValue;
 import com.shop.domain.entity.Product;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +14,13 @@ import java.util.Map;
  */
 public class ProductInfo {
     private Product product;
-    private Map<String, String> attributeValueMap = new HashMap<>();
+    private Map<Attribute, AttributeValue> attributeValueMap = new HashMap<>();
 
     public ProductInfo(){
 
     }
 
-    public ProductInfo(Product product, Map<String, String> attributeValueMap) {
+    public ProductInfo(Product product, Map<Attribute, AttributeValue> attributeValueMap) {
         this.product = product;
         this.attributeValueMap = attributeValueMap;
     }
@@ -30,17 +33,38 @@ public class ProductInfo {
         this.product = product;
     }
 
-    public Map<String, String> getAttributeValueMap() {
+    public Map<Attribute, AttributeValue> getAttributeValueMap() {
         return attributeValueMap;
     }
 
-    public void setAttributeValueMap(Map<String, String> attributeValueMap) {
+    public void setAttributeValueMap(Map<Attribute, AttributeValue> attributeValueMap) {
         this.attributeValueMap = attributeValueMap;
     }
 
-    public void manageAttributes(List<Object[]> values){
+    public void manageAttributes(List<Object[]> values, Product product){
         for (Object[] attrVal : values) {
-            attributeValueMap.put(attrVal[0].toString(), attrVal[1].toString());
+            Attribute attribute = new Attribute(attrVal[0].toString());
+            AttributeValue attributeValue = new AttributeValue(product, attribute, attrVal[1].toString());
+            attributeValueMap.put(attribute, attributeValue);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProductInfo that = (ProductInfo) o;
+
+        if (!product.equals(that.product)) return false;
+        return attributeValueMap.equals(that.attributeValueMap);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = product.hashCode();
+        result = 31 * result + attributeValueMap.hashCode();
+        return result;
     }
 }

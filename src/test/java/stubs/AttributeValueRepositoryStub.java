@@ -1,78 +1,24 @@
 package stubs;
 
 import com.shop.domain.entity.AttributeValue;
-import com.shop.domain.entity.Product;
-import com.shop.domain.entity.ProductType;
-import com.shop.repository.products.AttributeRepository;
 import com.shop.repository.products.AttributeValueRepository;
-import com.shop.repository.products.ProductRepository;
-import com.sun.corba.se.spi.ior.ObjectKey;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Created by Vladyslav Usenko on 22.08.2016.
+ * Created by Vladyslav Usenko on 23.08.2016.
  */
-public class ProductRepositoryStub implements ProductRepository {
-    private final Map<Long, Product> repository = new HashMap<>();
-    private final AttributeRepository attributeRepository;
-    private final AttributeValueRepository attributeValueRepository;
-
-    public ProductRepositoryStub(AttributeRepository attributeRepository, AttributeValueRepository attributeValueRepository) {
-        this.attributeRepository = attributeRepository;
-        this.attributeValueRepository = attributeValueRepository;
-    }
-
-    @Override
-    public Product findByUuid(@Param("uuid") String uuid) {
-        for (Product p : repository.values()) {
-            if (p.getUuid().equals(uuid))
-                return p;
-        }
-
-        return null;
-    }
-
-    @Override
-    public Object deleteByUuid(String uuid) {
-        Integer index = 1;
-        for (Product p : repository.values()) {
-            if (p.getUuid().equals(uuid))
-                repository.remove(index, p);
-            index++;
-        }
-        return -1;
-    }
-
-    @Override
-    public List<Object[]> getFullInfoByUuid(@Param("uuid") String uuid) {
-        List<Object[]> list = new ArrayList<>();
-        Product product = findByUuid(uuid);
-        for (AttributeValue attributeValue : attributeValueRepository.findAll()) {
-            if (attributeValue.getProduct().equals(product)){
-                list.add(new Object[]{attributeValue.getAttribute().getName(), attributeValue.getValue()});
-            }
-        }
-        return list;
-    }
-
-    @Override
-    public List<Product> findByType(@Param("type") ProductType type) {
-        List<Product> list = new ArrayList<>();
-        for (Product product : repository.values()) {
-            if (product.getType().equals(type)) {
-                list.add(product);
-            }
-        }
-        return list;
-    }
+public class AttributeValueRepositoryStub implements AttributeValueRepository {
+    private final Map<Long, AttributeValue> attributeValueMap = new HashMap<>();
 
     /**
      * Saves a given entity. Use the returned instance for further operations as the save operation might have changed the
@@ -82,9 +28,9 @@ public class ProductRepositoryStub implements ProductRepository {
      * @return the saved entity
      */
     @Override
-    public <S extends Product> S save(S entity) {
-        Long count = new Long(repository.size());
-        repository.put(count + 1, entity);
+    public <S extends AttributeValue> S save(S entity) {
+        Long count = new Long(attributeValueMap.size());
+        attributeValueMap.put(count + 1, entity);
         return entity;
     }
 
@@ -96,8 +42,8 @@ public class ProductRepositoryStub implements ProductRepository {
      * @throws IllegalArgumentException if {@code id} is {@literal null}
      */
     @Override
-    public Product findOne(Long aLong) {
-        return repository.get(aLong);
+    public AttributeValue findOne(Long aLong) {
+        return attributeValueMap.get(aLong);
     }
 
     /**
@@ -109,16 +55,17 @@ public class ProductRepositoryStub implements ProductRepository {
      */
     @Override
     public boolean exists(Long aLong) {
-        return repository.containsKey(aLong);
+        return attributeValueMap.containsKey(aLong);
     }
 
     @Override
-    public List<Product> findAll() {
-        return new ArrayList<>(repository.values());
+    public List<AttributeValue> findAll() {
+        return new ArrayList<>(attributeValueMap.values());
+
     }
 
     @Override
-    public List<Product> findAll(Sort sort) {
+    public List<AttributeValue> findAll(Sort sort) {
         return null;
     }
 
@@ -129,12 +76,12 @@ public class ProductRepositoryStub implements ProductRepository {
      * @return a page of entities
      */
     @Override
-    public Page<Product> findAll(Pageable pageable) {
+    public Page<AttributeValue> findAll(Pageable pageable) {
         return null;
     }
 
     @Override
-    public List<Product> findAll(Iterable<Long> longs) {
+    public List<AttributeValue> findAll(Iterable<Long> longs) {
         return null;
     }
 
@@ -145,7 +92,7 @@ public class ProductRepositoryStub implements ProductRepository {
      */
     @Override
     public long count() {
-        return repository.size();
+        return attributeValueMap.size();
     }
 
     /**
@@ -156,7 +103,7 @@ public class ProductRepositoryStub implements ProductRepository {
      */
     @Override
     public void delete(Long aLong) {
-        repository.remove(aLong);
+        attributeValueMap.remove(aLong);
     }
 
     /**
@@ -166,15 +113,8 @@ public class ProductRepositoryStub implements ProductRepository {
      * @throws IllegalArgumentException in case the given entity is {@literal null}.
      */
     @Override
-    public void delete(Product entity) {
-        Long key = new Long(1);
-        for (Product product : repository.values()) {
-            if (product.equals(entity)) {
-                repository.remove(key);
-            } else {
-                key++;
-            }
-        }
+    public void delete(AttributeValue entity) {
+        attributeValueMap.values().remove(entity);
     }
 
     /**
@@ -184,7 +124,7 @@ public class ProductRepositoryStub implements ProductRepository {
      * @throws IllegalArgumentException in case the given {@link Iterable} is {@literal null}.
      */
     @Override
-    public void delete(Iterable<? extends Product> entities) {
+    public void delete(Iterable<? extends AttributeValue> entities) {
 
     }
 
@@ -193,7 +133,7 @@ public class ProductRepositoryStub implements ProductRepository {
      */
     @Override
     public void deleteAll() {
-        repository.clear();
+        attributeValueMap.clear();
     }
 
     /**
@@ -204,9 +144,8 @@ public class ProductRepositoryStub implements ProductRepository {
 
     }
 
-
     @Override
-    public void deleteInBatch(Iterable<Product> entities) {
+    public void deleteInBatch(Iterable<AttributeValue> entities) {
 
     }
 
@@ -226,17 +165,17 @@ public class ProductRepositoryStub implements ProductRepository {
      * @see EntityManager#getReference(Class, Object)
      */
     @Override
-    public Product getOne(Long aLong) {
+    public AttributeValue getOne(Long aLong) {
         return null;
     }
 
     @Override
-    public <S extends Product> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends AttributeValue> List<S> findAll(Example<S> example, Sort sort) {
         return null;
     }
 
     @Override
-    public <S extends Product> List<S> findAll(Example<S> example) {
+    public <S extends AttributeValue> List<S> findAll(Example<S> example) {
         return null;
     }
 
@@ -247,12 +186,12 @@ public class ProductRepositoryStub implements ProductRepository {
      * @return the saved entity
      */
     @Override
-    public <S extends Product> S saveAndFlush(S entity) {
+    public <S extends AttributeValue> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Product> List<S> save(Iterable<S> entities) {
+    public <S extends AttributeValue> List<S> save(Iterable<S> entities) {
         return null;
     }
 
@@ -264,7 +203,7 @@ public class ProductRepositoryStub implements ProductRepository {
      * @throws IncorrectResultSizeDataAccessException if the Example yields more than one result.
      */
     @Override
-    public <S extends Product> S findOne(Example<S> example) {
+    public <S extends AttributeValue> S findOne(Example<S> example) {
         return null;
     }
 
@@ -277,7 +216,7 @@ public class ProductRepositoryStub implements ProductRepository {
      * @return a {@link Page} of entities matching the given {@link Example}.
      */
     @Override
-    public <S extends Product> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends AttributeValue> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
@@ -288,7 +227,7 @@ public class ProductRepositoryStub implements ProductRepository {
      * @return the number of instances matching the {@link Example}.
      */
     @Override
-    public <S extends Product> long count(Example<S> example) {
+    public <S extends AttributeValue> long count(Example<S> example) {
         return 0;
     }
 
@@ -299,7 +238,7 @@ public class ProductRepositoryStub implements ProductRepository {
      * @return {@literal true} if the data store contains elements that match the given {@link Example}.
      */
     @Override
-    public <S extends Product> boolean exists(Example<S> example) {
+    public <S extends AttributeValue> boolean exists(Example<S> example) {
         return false;
     }
 }

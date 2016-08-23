@@ -69,8 +69,8 @@ public class ShopService {
         this.productTypeRepository = productTypeRepository;
     }
 
-    public void putProduct(Product product, String type) {
-        ProductType productType = productTypeRepository.findByTypeName(type);
+    public void putProduct(Product product, ProductType type) {
+        ProductType productType = productTypeRepository.findByTypeName(type.getName());
         product.setType(productType);
         productRepository.save(product);
     }
@@ -79,12 +79,11 @@ public class ShopService {
         return productRepository.findByUuid(uuid.toString());
     }
 
-    // TODO: 22.08.2016 unit test
     public ProductInfo getProductFullInfo(UUID uuid){
         List<Object[]> info = productRepository.getFullInfoByUuid(uuid.toString());
         ProductInfo productInfo = new ProductInfo();
-        productInfo.manageAttributes(info);
         Product product = productRepository.findByUuid(uuid.toString());
+        productInfo.manageAttributes(info, product);
         productInfo.setProduct(product);
         return productInfo;
     }
@@ -93,52 +92,46 @@ public class ShopService {
         return productRepository.findAll();
     }
 
-    // TODO: 22.08.2016 unit test
     public void deleteProductByUUID(UUID uuid) {
         productRepository.deleteByUuid(uuid.toString());
     }
 
-    // TODO: 22.08.2016 unit test
     public void deleteAllProducts(){
         productRepository.deleteAll();
     }
 
-    // TODO: 22.08.2016 unit test
     public void addAttribute(Attribute attribute){
         attributeRepository.save(attribute);
     }
 
-    // TODO: 22.08.2016 unit test
     public Attribute getAttributeByName(String name){
         return attributeRepository.findByName(name);
     }
 
     //TODO 22.08.2016 unit test
-    public void addAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
-        attributeValue = setUpAttributeValue(attributeValue, uuid, attributeName);
+    public void addAttributeValue(AttributeValue attributeValue, UUID uuid, Attribute attribute){
+        attributeValue = setUpAttributeValue(attributeValue, uuid, attribute);
         attributeValueRepository.save(attributeValue);
     }
 
-    private AttributeValue setUpAttributeValue(AttributeValue attributeValue, UUID uuid, String attributeName){
+    private AttributeValue setUpAttributeValue(AttributeValue attributeValue, UUID uuid, Attribute attribute){
+        String attributeName = attribute.getName();
         Product product = productRepository.findByUuid(uuid.toString());
         attributeValue.setProduct(product);
-        Attribute attribute = getAttributeByName(attributeName);
-        attributeValue.setAttribute(attribute);
+        Attribute attributeByName = getAttributeByName(attributeName);
+        attributeValue.setAttribute(attributeByName);
 
         return attributeValue;
     }
 
-    //TODO 22.08.2016 unit test
     public ProductType getTypeByName(String name){
         return productTypeRepository.findByTypeName(name);
     }
 
-    //TODO 22.08.2016 unit test
     public List<Product> getProductsOfType(ProductType type){
         return productRepository.findByType(type);
     }
 
-    //TODO 22.08.2016 unit test
     public void addType(ProductType type){
         productTypeRepository.save(type);
     }
@@ -152,7 +145,6 @@ public class ShopService {
         productTypeRepository.save(productType);
     }
 
-    //TODO 22.08.2016 unit test
     public Set<Attribute> getAttributesOfType(String productTypeName){
         ProductType productType = productTypeRepository.findByTypeName(productTypeName);
         return productType.getAttributes();

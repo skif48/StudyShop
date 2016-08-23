@@ -1,6 +1,5 @@
 package com.shop.domain.user;
 
-import com.shop.service.shopServices.ShopService;
 import com.shop.service.userServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
