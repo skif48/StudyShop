@@ -8,8 +8,8 @@ import com.shop.repository.products.AttributeRepository;
 import com.shop.repository.products.AttributeValueRepository;
 import com.shop.repository.products.ProductRepository;
 import com.shop.repository.products.ProductTypeRepository;
-import com.shop.service.shopServices.ProductInfo;
-import com.shop.service.shopServices.ShopService;
+import com.shop.service.shop.ProductInfo;
+import com.shop.service.shop.ShopService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,4 +71,6 @@ public class ShopServiceUnitTest {
         ProductInfo test = shopService.getProductFullInfo(uuid);
         Assert.assertTrue(productInfo.equals(test));
     }
+
+
 }

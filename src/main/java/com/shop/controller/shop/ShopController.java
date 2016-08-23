@@ -1,9 +1,9 @@
-package com.shop.controller.shopControllers;
+package com.shop.controller.shop;
 
 import com.shop.domain.entity.*;
-import com.shop.service.shopServices.ProductInfo;
+import com.shop.service.shop.ProductInfo;
 import com.shop.utils.Tools;
-import com.shop.service.shopServices.ShopService;
+import com.shop.service.shop.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

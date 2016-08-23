@@ -1,6 +1,6 @@
-package com.shop.controller.userControllers;
+package com.shop.controller.user;
 
-import com.shop.service.userServices.CurrentUser;
+import com.shop.service.user.CurrentUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;

@@ -1,10 +1,9 @@
-package com.shop.service.shopServices;
+package com.shop.service.shop;
 
 import com.shop.domain.entity.Attribute;
 import com.shop.domain.entity.AttributeValue;
 import com.shop.domain.entity.Product;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

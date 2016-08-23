@@ -1,7 +1,7 @@
 package com.shop.configuration;
 
-import com.shop.service.shopServices.ShopService;
-import com.shop.service.userServices.UserService;
+import com.shop.service.shop.ShopService;
+import com.shop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

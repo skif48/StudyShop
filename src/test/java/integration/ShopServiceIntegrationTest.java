@@ -12,7 +12,7 @@ import com.shop.repository.products.AttributeRepository;
 import com.shop.repository.products.AttributeValueRepository;
 import com.shop.repository.products.ProductRepository;
 import com.shop.repository.products.ProductTypeRepository;
-import com.shop.service.shopServices.ShopService;
+import com.shop.service.shop.ShopService;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

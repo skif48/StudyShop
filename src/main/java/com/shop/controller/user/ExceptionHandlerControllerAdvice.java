@@ -1,4 +1,4 @@
-package com.shop.controller.userControllers;
+package com.shop.controller.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

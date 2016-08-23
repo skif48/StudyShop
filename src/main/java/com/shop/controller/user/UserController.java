@@ -1,8 +1,8 @@
-package com.shop.controller.userControllers;
+package com.shop.controller.user;
 
 import com.shop.domain.user.UserCreateForm;
 import com.shop.domain.user.UserCreateFormValidator;
-import com.shop.service.userServices.UserService;
+import com.shop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;

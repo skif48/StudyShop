@@ -1,18 +1,11 @@
-package com.shop.service.shopServices;
+package com.shop.service.shop;
 
 import com.shop.domain.entity.*;
-import com.shop.domain.user.Role;
-import com.shop.domain.user.User;
-import com.shop.domain.user.UserCreateForm;
 import com.shop.repository.products.AttributeRepository;
 import com.shop.repository.products.AttributeValueRepository;
 import com.shop.repository.products.ProductRepository;
 import com.shop.repository.products.ProductTypeRepository;
-import com.shop.repository.users.UserRepository;
-import com.shop.service.userServices.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -108,7 +101,6 @@ public class ShopService {
         return attributeRepository.findByName(name);
     }
 
-    //TODO 22.08.2016 unit test
     public void addAttributeValue(AttributeValue attributeValue, UUID uuid, Attribute attribute){
         attributeValue = setUpAttributeValue(attributeValue, uuid, attribute);
         attributeValueRepository.save(attributeValue);

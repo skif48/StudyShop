@@ -1,6 +1,6 @@
 package com.shop.domain.user;
 
-import com.shop.service.userServices.UserService;
+import com.shop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

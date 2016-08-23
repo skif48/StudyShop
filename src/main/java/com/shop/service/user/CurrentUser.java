@@ -1,4 +1,4 @@
-package com.shop.service.userServices;
+package com.shop.service.user;
 
 
 import com.shop.domain.user.Role;
