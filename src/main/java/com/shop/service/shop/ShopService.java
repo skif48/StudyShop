@@ -128,7 +128,6 @@ public class ShopService {
         productTypeRepository.save(type);
     }
 
-    //TODO 22.08.2016 unit test
     public void matchTypeAndAttribute(ProductType productType, Attribute attribute){
         Set<Attribute> set = new HashSet<>();
         set.addAll(productType.getAttributes());

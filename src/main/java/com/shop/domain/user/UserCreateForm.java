@@ -20,6 +20,16 @@ public class UserCreateForm {
     @NotNull
     private Role role = Role.USER;
 
+    public UserCreateForm() {
+    }
+
+    public UserCreateForm(String email, String password, String passwordRepeated, Role role) {
+        this.email = email;
+        this.password = password;
+        this.passwordRepeated = passwordRepeated;
+        this.role = role;
+    }
+
     public String getEmail() {
         return email;
     }

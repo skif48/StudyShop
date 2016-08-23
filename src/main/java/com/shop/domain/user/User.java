@@ -23,6 +23,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public User() {
+    }
+
+    public User(String email, String passwordHash, Role role) {
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+    }
 
     public Long getId() {
         return id;
@@ -64,5 +72,29 @@ public class User {
                 ", passwordHash='" + passwordHash + '\'' +
                 ", role=" + role +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+        if(user.id != null && this.id != null)
+            if (!id.equals(user.id))
+                return false;
+        if (!email.equals(user.email)) return false;
+        if (!passwordHash.equals(user.passwordHash)) return false;
+        return role == user.role;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + passwordHash.hashCode();
+        result = 31 * result + role.hashCode();
+        return result;
     }
 }

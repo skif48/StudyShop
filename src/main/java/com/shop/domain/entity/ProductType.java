@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -20,10 +21,12 @@ public class ProductType {
     private Set<Attribute> attributes;
 
     public ProductType() {
+        attributes = new HashSet<>();
     }
 
     public ProductType(String name) {
         this.name = name;
+        attributes = new HashSet<>();
     }
 
     @Id

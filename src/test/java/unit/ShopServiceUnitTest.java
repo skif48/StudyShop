@@ -18,6 +18,7 @@ import stubs.AttributeValueRepositoryStub;
 import stubs.ProductRepositoryStub;
 import stubs.ProductTypeRepositoryStub;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -70,6 +71,13 @@ public class ShopServiceUnitTest {
 
         ProductInfo test = shopService.getProductFullInfo(uuid);
         Assert.assertTrue(productInfo.equals(test));
+    }
+
+    @Test
+    public void whenAttributeIsMatchedToProductTypeItIsStoredInAttributesSetInProductType() throws Exception {
+        shopService.matchTypeAndAttribute(productType, attribute);
+        ArrayList<Attribute> attributes = new ArrayList<>(productType.getAttributes());
+        Assert.assertEquals(attributes.get(0), attribute);
     }
 
 

@@ -66,4 +66,12 @@ public class ProductInfo {
         result = 31 * result + attributeValueMap.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ProductInfo{" +
+                "product=" + product +
+                ", attributeValueMap=" + attributeValueMap +
+                '}';
+    }
 }
