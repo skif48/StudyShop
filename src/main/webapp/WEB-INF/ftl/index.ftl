@@ -11,14 +11,14 @@
         <!-- Latest compiled JavaScript -->
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <!-- CSS -->
-        <link rel="stylesheet" type="text/css" href="/css/index.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/indexCSS.css">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
     <div class="container">
         <form class="form-horizontal" role="form" action="/login" method="post">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
             <fieldset>
                 <!-- Form Name -->
                 <legend>Login</legend>
@@ -39,13 +39,13 @@
                 <div class="form-group">
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
-                        <input type="submit" class="btn btn-info" value="Submit Button" id="submitButton">
+                        <input type="submit" class="btn btn-info" value="Log in" id="submitButton">
                     </div>
                 </div>
             </fieldset>
         </form>
         <#if error.isPresent()>
-        <p>The email or password you have entered is invalid, try again.</p>
+            <p>The email or password you have entered is invalid, try again.</p>
         </#if>
     </div>
     </body>

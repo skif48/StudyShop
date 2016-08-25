@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
-<#-- @ftlvariable name="currentUser" type="eu.kielczewski.example.domain.CurrentUser" -->
+<#-- @ftlvariable name="currentUser" type="com.shop.service.user.CurrentUser" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +15,7 @@
     <#if currentUser??>
         <li>
             <form action="/logout" method="post">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
                 <button type="submit">Log out</button>
             </form>
         </li>

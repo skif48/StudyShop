@@ -19,6 +19,10 @@ public class AttributeValue {
     public AttributeValue() {
     }
 
+    public AttributeValue(String value) {
+        this.value = value;
+    }
+
     public AttributeValue(Product product, Attribute attribute, String value) {
         this.product = product;
         this.attribute = attribute;

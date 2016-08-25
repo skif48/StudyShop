@@ -54,4 +54,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.freeMarker();
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**")
+                .addResourceLocations("/resources/css")
+                .addResourceLocations("/resources/js");
+    }
 }

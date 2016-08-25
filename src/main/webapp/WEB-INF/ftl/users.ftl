@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="users" type="java.util.List<eu.kielczewski.example.domain.User>" -->
+<#-- @ftlvariable name="users" type="java.util.List<com.shop.domain.user.User>" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>

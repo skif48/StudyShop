@@ -43,7 +43,6 @@ public class UserService {
         return userRepository.findAll(new Sort("email"));
     }
 
-    //TODO 22.08.2016 unit test
     public User create(UserCreateForm form) {
         User user = new User();
         user.setEmail(form.getEmail());

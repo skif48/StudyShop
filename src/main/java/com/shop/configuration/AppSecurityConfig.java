@@ -25,12 +25,13 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/public/**", "/product/**", "/all/**").permitAll()
+                .antMatchers("/**", "/public/**", "/product/**", "/all/**").permitAll()
                 .antMatchers("/users/**").hasAuthority("ADMIN")
                 .anyRequest().fullyAuthenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error")
                 .usernameParameter("email")
                 .permitAll()
@@ -42,6 +43,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .rememberMe();
+
+        http.csrf().disable();
     }
 
     @Override
