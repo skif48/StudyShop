@@ -109,19 +109,15 @@
                            <!-- Wrapper for slides -->
                            <div class="carousel-inner" role="listbox">
                                <div class="item active">
-                                   <img src="https://unsplash.it/600/400" alt="Chania">
+                                   <img src="/getImage/${product.getUuid()}?imgNumber=0" alt="Chania">
                                </div>
 
                                <div class="item">
-                                   <img src="https://unsplash.it/601/401" alt="Chania">
+                                   <img src="/getImage/${product.getUuid()}?imgNumber=1" alt="Chania">
                                </div>
 
                                <div class="item">
-                                   <img src="https://unsplash.it/602/402" alt="Flower">
-                               </div>
-
-                               <div class="item">
-                                   <img src="https://unsplash.it/603/403" alt="Flower">
+                                   <img src="/getImage/${product.getUuid()}?imgNumber=2" alt="Flower">
                                </div>
                            </div>
 

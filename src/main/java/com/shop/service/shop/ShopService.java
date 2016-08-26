@@ -1,13 +1,16 @@
 package com.shop.service.shop;
 
 import com.shop.domain.entity.*;
-import com.shop.repository.products.AttributeRepository;
-import com.shop.repository.products.AttributeValueRepository;
-import com.shop.repository.products.ProductRepository;
-import com.shop.repository.products.ProductTypeRepository;
+import com.shop.repository.products.*;
+import com.shop.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -26,6 +29,9 @@ public class ShopService {
 
     @Autowired
     private ProductTypeRepository productTypeRepository;
+
+    @Autowired
+    private ProductImageRepository productImageRepository;
 
     public ShopService() {
     }
@@ -68,11 +74,11 @@ public class ShopService {
         productRepository.save(product);
     }
 
-    public Product getProductByUUID(UUID uuid){
+    public Product getProductByUUID(UUID uuid) {
         return productRepository.findByUuid(uuid.toString());
     }
 
-    public ProductInfo getProductFullInfo(UUID uuid){
+    public ProductInfo getProductFullInfo(UUID uuid) {
         List<Object[]> info = productRepository.getFullInfoByUuid(uuid.toString());
         ProductInfo productInfo = new ProductInfo();
         Product product = productRepository.findByUuid(uuid.toString());
@@ -89,24 +95,24 @@ public class ShopService {
         productRepository.deleteByUuid(uuid.toString());
     }
 
-    public void deleteAllProducts(){
+    public void deleteAllProducts() {
         productRepository.deleteAll();
     }
 
-    public void addAttribute(Attribute attribute){
+    public void addAttribute(Attribute attribute) {
         attributeRepository.save(attribute);
     }
 
-    public Attribute getAttributeByName(String name){
+    public Attribute getAttributeByName(String name) {
         return attributeRepository.findByName(name);
     }
 
-    public void addAttributeValue(AttributeValue attributeValue, UUID uuid, Attribute attribute){
+    public void addAttributeValue(AttributeValue attributeValue, UUID uuid, Attribute attribute) {
         attributeValue = setUpAttributeValue(attributeValue, uuid, attribute);
         attributeValueRepository.save(attributeValue);
     }
 
-    private AttributeValue setUpAttributeValue(AttributeValue attributeValue, UUID uuid, Attribute attribute){
+    private AttributeValue setUpAttributeValue(AttributeValue attributeValue, UUID uuid, Attribute attribute) {
         String attributeName = attribute.getName();
         Product product = productRepository.findByUuid(uuid.toString());
         attributeValue.setProduct(product);
@@ -116,19 +122,19 @@ public class ShopService {
         return attributeValue;
     }
 
-    public ProductType getTypeByName(String name){
+    public ProductType getTypeByName(String name) {
         return productTypeRepository.findByTypeName(name);
     }
 
-    public List<Product> getProductsOfType(ProductType type){
+    public List<Product> getProductsOfType(ProductType type) {
         return productRepository.findByType(type);
     }
 
-    public void addType(ProductType type){
+    public void addType(ProductType type) {
         productTypeRepository.save(type);
     }
 
-    public void matchTypeAndAttribute(ProductType productType, Attribute attribute){
+    public void matchTypeAndAttribute(ProductType productType, Attribute attribute) {
         Set<Attribute> set = new HashSet<>();
         set.addAll(productType.getAttributes());
         set.add(attribute);
@@ -136,8 +142,21 @@ public class ShopService {
         productTypeRepository.save(productType);
     }
 
-    public Set<Attribute> getAttributesOfType(String productTypeName){
+    public Set<Attribute> getAttributesOfType(String productTypeName) {
         ProductType productType = productTypeRepository.findByTypeName(productTypeName);
         return productType.getAttributes();
+    }
+
+    public void setImageToProduct(URL url, UUID uuid) throws IOException {
+        byte[] imageInByte = Tools.imageToByteArray(ImageIO.read(url));
+        Product product = getProductByUUID(uuid);
+        ProductImage productImage = new ProductImage(product, imageInByte);
+        productImageRepository.save(productImage);
+    }
+
+    public byte[] getImageForSpecifiedProduct(UUID uuid, int imgNumber){
+        Product product = productRepository.findByUuid(uuid.toString());
+        ArrayList<ProductImage> productImages = new ArrayList<>(productImageRepository.getImagesForProduct(product));
+        return productImages.get(imgNumber).getImage();
     }
 }

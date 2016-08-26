@@ -3,6 +3,7 @@ package com.shop.domain.entity;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -16,6 +17,7 @@ public class Product {
     private String uuid;
     private ProductType type;
     private String label;
+    private Set<ProductImage> images;
 
     public Product() {
     }
@@ -51,6 +53,15 @@ public class Product {
     @NotNull
     public String getLabel() {
         return label;
+    }
+
+    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
+    public Set<ProductImage> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<ProductImage> images) {
+        this.images = images;
     }
 
     public void setProductID(long productID) {

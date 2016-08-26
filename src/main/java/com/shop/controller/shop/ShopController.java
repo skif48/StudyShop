@@ -7,15 +7,27 @@ import com.shop.service.user.UserService;
 import com.shop.utils.Tools;
 import com.shop.service.shop.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.security.Principal;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by Vladyslav Usenko on 11.08.2016.
@@ -132,5 +144,19 @@ public class ShopController {
     public ResponseEntity getAttributesOfType(@RequestParam(value = "typeName") String typeName){
         Set<Attribute> attributes = shopService.getAttributesOfType(typeName);
         return new ResponseEntity<>(attributes, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/addImage", method = RequestMethod.POST)
+    public ResponseEntity addImageToProduct(@RequestParam(value = "uuid") UUID uuid, @RequestHeader(value = "imageURL") URL url) throws IOException {
+        shopService.setImageToProduct(url, uuid);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "/getImage/{productUUID}", method = RequestMethod.GET)
+    public ResponseEntity getImage(@PathVariable(value = "productUUID") String uuid, @RequestParam(value = "imgNumber") int img){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(shopService.getImageForSpecifiedProduct(UUID.fromString(uuid), img), headers, HttpStatus.OK);
     }
 }
