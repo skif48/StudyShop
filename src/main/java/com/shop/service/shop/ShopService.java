@@ -159,4 +159,8 @@ public class ShopService {
         ArrayList<ProductImage> productImages = new ArrayList<>(productImageRepository.getImagesForProduct(product));
         return productImages.get(imgNumber).getImage();
     }
+
+    public List<ProductType> getAllProductTypes(){
+        return productTypeRepository.findAll();
+    }
 }

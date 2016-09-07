@@ -48,6 +48,18 @@ public class ShopController {
         return mav;
     }
 
+    @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
+    public ModelAndView putProduct(Principal principal, @ModelAttribute("userInfo") ModelMap map){
+        if(principal != null){
+            String username = principal.getName();
+            User user = userService.getUserByEmail(username).get();
+            map.addAttribute("user", user);
+        }
+
+        map.addAttribute("productTypes", shopService.getAllProductTypes());
+        return new ModelAndView("newProduct", map);
+    }
+
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity putProduct(@RequestBody Product product, @RequestHeader(name = "type") ProductType type){
@@ -150,7 +162,6 @@ public class ShopController {
     public ResponseEntity addImageToProduct(@RequestParam(value = "uuid") UUID uuid, @RequestHeader(value = "imageURL") URL url) throws IOException {
         shopService.setImageToProduct(url, uuid);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     @RequestMapping(value = "/getImage/{productUUID}", method = RequestMethod.GET)
