@@ -1,9 +1,5 @@
 <#-- @ftlvariable name="user" type="com.shop.domain.user.User" -->
 <#-- @ftlvariable name="productTypes" type="java.util.List<ProductType>" -->
-<#-- @ftlvariable name="laptopAttributes" type="java.util.List<Attribute>" -->
-<#-- @ftlvariable name="pcAttributes" type="java.util.List<Attribute>" -->
-<#-- @ftlvariable name="phoneAttributes" type="java.util.List<Attribute>" -->
-<#-- @ftlvariable name="tvAttributes" type="java.util.List<Attribute>" -->
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -93,6 +89,8 @@
                                 <#list productTypes as productType>
                                     <div class="animate-switch" ng-switch-when="${productType.getName()}">
                                         ${productType.getName()}
+                                        <div class="attributesContent" ng-repeat="attribute in attributes">
+                                        </div>
                                     </div>
                                 </#list>
                             </div>

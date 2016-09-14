@@ -63,7 +63,8 @@
        <div class="container" id="productInfo">
            <div class="row">
                <div class="col-md-6">
-                   <span>${product.getLabel()}</span>
+                   <label for="label">Product label: </label>
+                   <span name="label" id="label">${product.getLabel()}</span>
                </div>
                <div class="col-md-3">
                    <span class="pull-right">100$</span>

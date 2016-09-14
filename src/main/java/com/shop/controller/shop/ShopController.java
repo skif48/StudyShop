@@ -154,7 +154,7 @@ public class ShopController {
 
     @RequestMapping(value = "/attributesOfType", method = RequestMethod.GET)
     public ResponseEntity getAttributesOfType(@RequestParam(value = "typeName") String typeName){
-        Set<Attribute> attributes = shopService.getAttributesOfType(typeName);
+        List<Attribute> attributes = new ArrayList<>(shopService.getAttributesOfType(typeName));
         return new ResponseEntity<>(attributes, HttpStatus.OK);
     }
 
