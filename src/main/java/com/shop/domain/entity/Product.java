@@ -18,14 +18,16 @@ public class Product {
     private ProductType type;
     private String label;
     private Set<ProductImage> images;
+    private Manufacturer manufacturer;
 
     public Product() {
     }
 
-    public Product(UUID uuid, ProductType type, String label) {
+    public Product(UUID uuid, ProductType type, String label, Manufacturer manufacturer) {
         this.uuid = uuid.toString();
         this.type = type;
         this.label = label;
+        this.manufacturer = manufacturer;
     }
 
     @Id
@@ -78,6 +80,21 @@ public class Product {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "manufacturer_id")
+    public Manufacturer getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public void changeProduct(Product product){
+        setLabel(product.getLabel());
+        setType(product.getType());
     }
 
     @Override

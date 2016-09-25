@@ -1,9 +1,6 @@
 package unit;
 
-import com.shop.domain.entity.Attribute;
-import com.shop.domain.entity.AttributeValue;
-import com.shop.domain.entity.Product;
-import com.shop.domain.entity.ProductType;
+import com.shop.domain.entity.*;
 import com.shop.repository.products.AttributeRepository;
 import com.shop.repository.products.AttributeValueRepository;
 import com.shop.repository.products.ProductRepository;
@@ -31,6 +28,7 @@ public class ShopServiceUnitTest {
     private Attribute attribute;
     private ProductType productType;
     private UUID uuid;
+    private Manufacturer manufacturer;
     private AttributeValue attributeValue;
     private ProductRepository productRepository;
     private ProductTypeRepository productTypeRepository;
@@ -40,8 +38,9 @@ public class ShopServiceUnitTest {
     @Before
     public void setUp() throws Exception{
         uuid = UUID.fromString("4b9293b8-6386-498a-8b7b-cceaa1d1dc36");
-        product = new Product(uuid, new ProductType("PHONE"), "Asus Zenfone 2");
+        product = new Product(uuid, new ProductType("PHONE"), "Zenfone 2", new Manufacturer("Asus"));
         attribute = new Attribute("diagonal");
+        manufacturer = new Manufacturer("Asus");
         productType = new ProductType("PHONE");
         attributeValue = new AttributeValue(product, attribute, "5.5");
 

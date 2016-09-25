@@ -7,7 +7,6 @@ import com.shop.service.user.UserService;
 import com.shop.utils.Tools;
 import com.shop.service.shop.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,13 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.Principal;
 import java.util.*;
@@ -145,9 +138,9 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/matchTypeAndAttribute", method = RequestMethod.PUT)
-    public ResponseEntity matchTypeAndAttribute(@RequestParam(value = "typeName") ProductType type, @RequestHeader(value = "attributeName") Attribute attribute){
-        ProductType productType = shopService.getTypeByName(type.getName());
-        Attribute attributeByName = shopService.getAttributeByName(attribute.getName());
+    public ResponseEntity matchTypeAndAttribute(@RequestParam(value = "typeName") String type, @RequestHeader(value = "attributeName") String attribute){
+        ProductType productType = shopService.getTypeByName(type);
+        Attribute attributeByName = shopService.getAttributeByName(attribute);
         shopService.matchTypeAndAttribute(productType, attributeByName);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -170,4 +163,11 @@ public class ShopController {
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(shopService.getImageForSpecifiedProduct(UUID.fromString(uuid), img), headers, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/changeProduct", method = RequestMethod.PUT)
+    public ResponseEntity changeProduct(@RequestParam(value = "uuid") String uuid, @RequestBody Product product){
+        shopService.getProductByUUID(UUID.fromString(uuid)).changeProduct(product);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

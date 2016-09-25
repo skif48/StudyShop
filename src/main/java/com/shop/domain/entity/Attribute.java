@@ -13,10 +13,16 @@ import java.util.Set;
 @Entity
 @Table(name = "attributes")
 public class Attribute {
+
+    public enum InputType{
+        ENUMERABLE, TEXT
+    }
+
     private long attributeID;
     private String name;
     @JsonIgnore
     private Set<AttributeValue> attributeValueSet;
+    private InputType inputType;
 
     public Attribute() {
     }
@@ -60,6 +66,16 @@ public class Attribute {
 
     public void setAttributeValueSet(Set<AttributeValue> attributeValueSet) {
         this.attributeValueSet = attributeValueSet;
+    }
+
+    @NotNull
+    @Column(name = "input_type")
+    public InputType getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(InputType inputType) {
+        this.inputType = inputType;
     }
 
     @Override

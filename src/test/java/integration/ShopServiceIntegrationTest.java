@@ -5,6 +5,7 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.shop.ShopApplication;
+import com.shop.domain.entity.Manufacturer;
 import com.shop.domain.entity.Product;
 import com.shop.domain.entity.ProductType;
 import com.shop.domain.user.User;
@@ -53,6 +54,7 @@ public class ShopServiceIntegrationTest {
     private Product product;
     private User user;
     private UUID uuid;
+    private Manufacturer manufacturer;
 
     protected static final String PRODUCTS_DATASET              = "classpath:datasets/products.xml";
     protected static final String PRODUCTTYPE_DATASET           = "classpath:datasets/producttype.xml";
@@ -64,12 +66,14 @@ public class ShopServiceIntegrationTest {
     public void setUp() throws Exception{
         uuid = UUID.fromString("8f4622e6-91f3-474a-ba4d-df92a40a60a8");
 
+        manufacturer = new Manufacturer("Asus");
+
         shopService = new ShopService();
         shopService.setProductRepository(productRepository);
         shopService.setProductTypeRepository(productTypeRepository);
         shopService.setAttributeRepository(attributeRepository);
         shopService.setAttributeValueRepository(attributeValueRepository);
 
-        product = new Product(uuid, new ProductType("PHONE"), "Asus Zenfone 2");
+        product = new Product(uuid, new ProductType("PHONE"), "Zenfone 2", manufacturer);
     }
 }
