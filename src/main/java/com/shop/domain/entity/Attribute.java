@@ -23,6 +23,7 @@ public class Attribute {
     @JsonIgnore
     private Set<AttributeValue> attributeValueSet;
     private InputType inputType;
+    private Set<EnumerableAttributeValue> enumerableAttributeValueSet;
 
     public Attribute() {
     }
@@ -76,6 +77,15 @@ public class Attribute {
 
     public void setInputType(InputType inputType) {
         this.inputType = inputType;
+    }
+
+    @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL)
+    public Set<EnumerableAttributeValue> getEnumerableAttributeValueSet() {
+        return enumerableAttributeValueSet;
+    }
+
+    public void setEnumerableAttributeValueSet(Set<EnumerableAttributeValue> enumerableAttributeValueSet) {
+        this.enumerableAttributeValueSet = enumerableAttributeValueSet;
     }
 
     @Override

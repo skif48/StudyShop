@@ -50,30 +50,33 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <#if user??>
-                    <#assign id = user.getId()>
-                        <li><a href="/user/${id}"><span class="glyphicon glyphicon-user"></span><span id="email"> ${user.getEmail()}</span></a></li>
-                    <#else>
-                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        <#assign id = user.getId()>
+                            <li><a href="/user/${id}"><span class="glyphicon glyphicon-user"></span><span id="email"> ${user.getEmail()}</span></a>
+                            </li>
+                            <#else>
+                                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                     </#if>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container">
-        <form class="form-horizontal" role="form"  ng-controller="CreateProductController">
+        <form class="form-horizontal" role="form" ng-controller="CreateProductController">
             <fieldset>
                 <legend>Create Product</legend>
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="labelInput">Label: </label>
                     <div class="col-md-4">
-                        <input id="labelInput" type="text" name="label" placeholder="label" class="form-control input-md" required autofocus/>
+                        <input id="labelInput" type="text" name="label" placeholder="label"
+                               class="form-control input-md" required autofocus/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="productTypeSelect">Select type:</label>
                     <div class="col-md-4">
-                        <select class="form-control" id="productTypeSelect" ng-model="data.selection" ng-change="getAttributes()">
+                        <select class="form-control" id="productTypeSelect" ng-model="data.selection"
+                                ng-change="getAttributes()">
                             <#list productTypes as productType>
                                 <option>${productType.getName()}</option>
                             </#list>
@@ -86,10 +89,9 @@
 
                         </div>
                         <div class="col-md-4">
-                            <div class="animate-switch-container" ng-switch on="data.selection" >
+                            <div class="animate-switch-container" ng-switch on="data.selection">
                                 <#list productTypes as productType>
                                     <div class="animate-switch" ng-switch-when="${productType.getName()}">
-                                        {{attributesOfType}}
                                     </div>
                                 </#list>
                             </div>
@@ -99,10 +101,29 @@
                         </div>
                     </div>
                 </div>
+                <div ng-repeat="attribute in attributesOfType">
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-md-4 control-label" for="labelInput"> {{attribute.name}} : </label>
+                            <div class="col-md-4">
+                                <div ng-if="attribute.inputType == 'TEXT'">
+                                    <input ng-attr-id="'input' + {{attribute.name}}" type="text" placeholder="{{attribute.name}}" class="form-control input-md"/>
+                                </div>
+                                <div ng-if="attribute.inputType == 'ENUMERABLE'">
+                                    {{attribute.name}}
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                        <input type="submit" class="btn btn-info" value="Create product" id="submitButton">
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <input type="submit" class="btn btn-info" value="Create product" id="submitButton"/>
+                        </div>
+                        <div class="col-md-4"></div>
                     </div>
                 </div>
             </fieldset>
