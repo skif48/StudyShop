@@ -1,9 +1,12 @@
 package com.shop.service.shop;
 
 import com.shop.domain.entity.*;
+import com.shop.error.ErrorCode;
+import com.shop.error.ServiceException;
 import com.shop.repository.products.*;
 import com.shop.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -68,6 +71,14 @@ public class ShopService {
         this.productTypeRepository = productTypeRepository;
     }
 
+    public ProductImageRepository getProductImageRepository() {
+        return productImageRepository;
+    }
+
+    public void setProductImageRepository(ProductImageRepository productImageRepository) {
+        this.productImageRepository = productImageRepository;
+    }
+
     public void putProduct(Product product, ProductType type) {
         ProductType productType = productTypeRepository.findByTypeName(type.getName());
         product.setType(productType);
@@ -78,10 +89,11 @@ public class ShopService {
         return productRepository.findByUuid(uuid.toString());
     }
 
-    public ProductInfo getProductFullInfo(UUID uuid) {
+    public ProductInfo getProductFullInfo(UUID uuid) throws ServiceException {
         List<Object[]> info = productRepository.getFullInfoByUuid(uuid.toString());
         ProductInfo productInfo = new ProductInfo();
         Product product = productRepository.findByUuid(uuid.toString());
+        if(product == null) throw new ServiceException(ErrorCode.NO_PRODUCT_WITH_SUCH_UUID, "no product found with UUID: " + uuid.toString(), null);
         productInfo.manageAttributes(info, product);
         productInfo.setProduct(product);
         return productInfo;

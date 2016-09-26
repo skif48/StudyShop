@@ -81,7 +81,8 @@ public class Attribute {
     @Override
     public String toString() {
         return "Attribute{" +
-                "attributeValueSet=" + attributeValueSet +
+                "inputType=" + inputType +
+                ", attributeID=" + attributeID +
                 ", name='" + name + '\'' +
                 '}';
     }

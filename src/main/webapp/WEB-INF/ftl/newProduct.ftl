@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="user" type="com.shop.domain.user.User" -->
 <#-- @ftlvariable name="productTypes" type="java.util.List<ProductType>" -->
+<#-- @ftlvariable name="attributesOfType" type="java.util.List<Attribute>" -->
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -60,7 +61,7 @@
         </div>
     </nav>
     <div class="container">
-        <form class="form-horizontal" role="form"  ng-controller="ExampleController">
+        <form class="form-horizontal" role="form"  ng-controller="CreateProductController">
             <fieldset>
                 <legend>Create Product</legend>
                 <div class="form-group">
@@ -72,7 +73,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="productTypeSelect">Select type:</label>
                     <div class="col-md-4">
-                        <select class="form-control" id="productTypeSelect" ng-model="selection">
+                        <select class="form-control" id="productTypeSelect" ng-model="data.selection" ng-change="getAttributes()">
                             <#list productTypes as productType>
                                 <option>${productType.getName()}</option>
                             </#list>
@@ -85,12 +86,10 @@
 
                         </div>
                         <div class="col-md-4">
-                            <div class="animate-switch-container" ng-switch on="selection">
+                            <div class="animate-switch-container" ng-switch on="data.selection" >
                                 <#list productTypes as productType>
                                     <div class="animate-switch" ng-switch-when="${productType.getName()}">
-                                        ${productType.getName()}
-                                        <div class="attributesContent" ng-repeat="attribute in attributes">
-                                        </div>
+                                        {{attributesOfType}}
                                     </div>
                                 </#list>
                             </div>

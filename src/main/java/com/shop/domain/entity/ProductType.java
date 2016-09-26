@@ -5,7 +5,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -69,5 +71,9 @@ public class ProductType {
 
     public void setAttributes(Set<Attribute> attributes) {
         this.attributes = attributes;
+    }
+
+    public List<Attribute> obtainListOfAttributes(){
+        return new ArrayList<>(attributes);
     }
 }

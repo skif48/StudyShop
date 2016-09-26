@@ -63,8 +63,7 @@
        <div class="container" id="productInfo">
            <div class="row">
                <div class="col-md-6">
-                   <label for="label">Product label: </label>
-                   <span name="label" id="label">${product.getLabel()}</span>
+                   <span name="manufacturer" id="manufacturer">${product.getManufacturer().getName()}</span>
                </div>
                <div class="col-md-3">
                    <span class="pull-right">100$</span>
@@ -73,6 +72,11 @@
                    <button type="button" class="btn btn-default btn-sm">
                        <span class="glyphicon glyphicon-shopping-cart"></span> Add to cart
                    </button>
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-md-6">
+                   <span name="label" id="label">${product.getLabel()}</span>
                </div>
            </div>
            <div class="row">

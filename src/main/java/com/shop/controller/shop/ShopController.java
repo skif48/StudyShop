@@ -2,6 +2,7 @@ package com.shop.controller.shop;
 
 import com.shop.domain.entity.*;
 import com.shop.domain.user.User;
+import com.shop.error.ServiceException;
 import com.shop.service.shop.ProductInfo;
 import com.shop.service.user.UserService;
 import com.shop.utils.Tools;
@@ -68,7 +69,7 @@ public class ShopController {
     @ResponseBody
     public ModelAndView getProduct(@RequestParam(value = "uuid") UUID uuid,
                                    @ModelAttribute(name = "productInfo") ModelMap map,
-                                   Principal principal){
+                                   Principal principal) throws ServiceException {
         if(Tools.isValidUUID(uuid.toString())){
             ProductInfo productInfo = shopService.getProductFullInfo(uuid);
             map.addAttribute("product", productInfo.getProduct());
