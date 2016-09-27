@@ -36,6 +36,8 @@ public class ShopService {
     @Autowired
     private ProductImageRepository productImageRepository;
 
+    @Autowired ManufacturerRepository manufacturerRepository;
+
     public ShopService() {
     }
 
@@ -174,5 +176,9 @@ public class ShopService {
 
     public List<ProductType> getAllProductTypes(){
         return productTypeRepository.findAll();
+    }
+
+    public List<Manufacturer> getAllManufacturers() {
+        return manufacturerRepository.findAll();
     }
 }

@@ -1,6 +1,5 @@
 <#-- @ftlvariable name="user" type="com.shop.domain.user.User" -->
 <#-- @ftlvariable name="productTypes" type="java.util.List<ProductType>" -->
-<#-- @ftlvariable name="attributesOfType" type="java.util.List<Attribute>" -->
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -66,39 +65,27 @@
             <fieldset>
                 <legend>Create Product</legend>
                 <div class="form-group">
+                    <label class="col-md-4 control-label" for="manufacturerSelect">Manufacturer: </label>
+                    <div class="col-md-4">
+                        <select class="form-control" id="manufacturerSelect" name="manufacturer">
+                            <option ng-repeat="manufacturer in manufacturers">{{manufacturer.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-md-4 control-label" for="labelInput">Label: </label>
                     <div class="col-md-4">
-                        <input id="labelInput" type="text" name="label" placeholder="label"
-                               class="form-control input-md" required autofocus/>
+                        <input id="labelInput" type="text" name="label" placeholder="label" class="form-control input-md" required autofocus/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="productTypeSelect">Select type:</label>
                     <div class="col-md-4">
-                        <select class="form-control" id="productTypeSelect" ng-model="data.selection"
-                                ng-change="getAttributes()">
+                        <select class="form-control" id="productTypeSelect" name="productType" ng-model="data.selection" ng-change="getAttributes()">
                             <#list productTypes as productType>
                                 <option>${productType.getName()}</option>
                             </#list>
                         </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-4">
-
-                        </div>
-                        <div class="col-md-4">
-                            <div class="animate-switch-container" ng-switch on="data.selection">
-                                <#list productTypes as productType>
-                                    <div class="animate-switch" ng-switch-when="${productType.getName()}">
-                                    </div>
-                                </#list>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-
-                        </div>
                     </div>
                 </div>
                 <div ng-repeat="attribute in attributesOfType">
@@ -107,10 +94,12 @@
                             <label class="col-md-4 control-label" for="labelInput"> {{attribute.name}} : </label>
                             <div class="col-md-4">
                                 <div ng-if="attribute.inputType == 'TEXT'">
-                                    <input ng-attr-id="'input' + {{attribute.name}}" type="text" placeholder="{{attribute.name}}" class="form-control input-md"/>
+                                    <input ng-attr-id="'input' + {{attribute.name}}" name="{{attribute.name}} "type="text" placeholder="{{attribute.name}}" class="form-control input-md" required/>
                                 </div>
                                 <div ng-if="attribute.inputType == 'ENUMERABLE'">
-                                    {{attribute.name}}
+                                    <select class="form-control" id="enumerableAttributesSelect" name={{attribute.name}}>
+                                        <option ng-repeat="enumerable in attribute.enumerableAttributeValueSet" required>{{enumerable.value}}</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4"></div>
@@ -121,7 +110,7 @@
                     <div class="row">
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
-                            <input type="submit" class="btn btn-info" value="Create product" id="submitButton"/>
+                            <input type="submit" class="btn btn-info" value="Create product" id="submitButton" ng-click="sendProductData()"/>
                         </div>
                         <div class="col-md-4"></div>
                     </div>

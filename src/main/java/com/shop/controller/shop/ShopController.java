@@ -171,4 +171,9 @@ public class ShopController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value ="/manufacturers", method = RequestMethod.GET)
+    public ResponseEntity getManufacturers(){
+        ArrayList<Manufacturer> manufacturers = new ArrayList<>(shopService.getAllManufacturers());
+        return new ResponseEntity<>(manufacturers, HttpStatus.OK);
+    }
 }

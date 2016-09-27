@@ -1,5 +1,6 @@
 package com.shop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Set;
 public class Manufacturer {
     private long id;
     private String name;
+    @JsonIgnore
     private Set<Product> productSet;
 
     public Manufacturer() {
