@@ -17,6 +17,7 @@ public class EnumerableAttributeValue {
     private String value;
     @JsonIgnore
     private Attribute attribute;
+    @JsonIgnore
     private Set<AttributeValue> attributeValueSet;
 
     public EnumerableAttributeValue() {

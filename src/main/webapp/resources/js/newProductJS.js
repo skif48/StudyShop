@@ -65,7 +65,7 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
         $http.post('/addProduct', product, config).then(
             function(response){
                 $scope.uuid = response.data;
-                console.log($scope.uuid);
+                window.location = "/product?uuid=" + $scope.uuid;
             }
         );
     };
