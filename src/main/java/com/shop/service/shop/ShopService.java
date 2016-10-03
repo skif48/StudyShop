@@ -4,6 +4,7 @@ import com.shop.domain.entity.*;
 import com.shop.error.ErrorCode;
 import com.shop.error.ServiceException;
 import com.shop.repository.products.*;
+import com.shop.service.dataUtils.ProductRequest;
 import com.shop.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -36,7 +37,11 @@ public class ShopService {
     @Autowired
     private ProductImageRepository productImageRepository;
 
-    @Autowired ManufacturerRepository manufacturerRepository;
+    @Autowired
+    private ManufacturerRepository manufacturerRepository;
+
+    @Autowired
+    private EnumerableAttributeValueRepository enumerableAttributeValueRepository;
 
     public ShopService() {
     }
@@ -81,10 +86,40 @@ public class ShopService {
         this.productImageRepository = productImageRepository;
     }
 
-    public void putProduct(Product product, ProductType type) {
-        ProductType productType = productTypeRepository.findByTypeName(type.getName());
-        product.setType(productType);
+    public UUID putProduct(ProductRequest productRequest) {
+        Product product = new Product();
+        ProductType type = getTypeByName(productRequest.getType().getName());
+        Manufacturer manufacturer = getManufacturerByName(productRequest.getManufacturer().getName());
+
+        product.setLabel(productRequest.getLabel());
+        product.setType(type);
+        product.setManufacturer(manufacturer);
+        UUID uuid = UUID.randomUUID();
+        product.setUuid(uuid.toString());
         productRepository.save(product);
+
+        Map<Attribute, AttributeValue> attributeValueMap = new HashMap<>();
+        for(Attribute attribute : productRequest.getAttributes().keySet()){
+            Attribute temp = attributeRepository.findByName(attribute.getName());
+            if(temp.getEnumerableAttributeValueSet().isEmpty())
+                attributeValueMap.put(temp, new AttributeValue(productRepository.findByUuid(uuid.toString()), temp, productRequest.getAttributes().get(attribute).getValue()));
+            else {
+                List<Object> enumerableAttributeValuesByName = new ArrayList<>(enumerableAttributeValueRepository.findEnumerableAttributeValueByName(temp.getName()));
+                for(Object obj : enumerableAttributeValuesByName){
+                    Long id = Long.parseLong(obj.toString());
+                    EnumerableAttributeValue enumerableAttributeValue = enumerableAttributeValueRepository.findOne(id);
+                    if(enumerableAttributeValue.getValue().equals(productRequest.getAttributes().get(attribute).getValue())){
+                        attributeValueMap.put(temp, new AttributeValue(productRepository.findByUuid(uuid.toString()), temp, enumerableAttributeValue));
+                    }
+                }
+            }
+        }
+
+        for(AttributeValue value : attributeValueMap.values()){
+            attributeValueRepository.save(value);
+        }
+
+        return uuid;
     }
 
     public Product getProductByUUID(UUID uuid) {
@@ -96,7 +131,20 @@ public class ShopService {
         ProductInfo productInfo = new ProductInfo();
         Product product = productRepository.findByUuid(uuid.toString());
         if(product == null) throw new ServiceException(ErrorCode.NO_PRODUCT_WITH_SUCH_UUID, "no product found with UUID: " + uuid.toString(), null);
-        productInfo.manageAttributes(info, product);
+        List<Attribute> attributes = attributeRepository.findAll();
+        List<String> enumerableAttributesNames = new ArrayList<>();
+        for (Attribute attribute : attributes){
+            if(!attribute.getEnumerableAttributeValueSet().isEmpty()){
+                enumerableAttributesNames.add(attribute.getName());
+            }
+        }
+        Map<String, String> enumerableAttributesValuesMap = new HashMap<>();
+        for (String name : enumerableAttributesNames){
+            String element = enumerableAttributeValueRepository.findEnumerableAttributeValueOfProductByUUIDAndName(name, product.getUuid());
+            if(element != null)
+                enumerableAttributesValuesMap.put(name, element);
+        }
+        productInfo.manageAttributes(info, product, enumerableAttributesValuesMap);
         productInfo.setProduct(product);
         return productInfo;
     }
@@ -180,5 +228,9 @@ public class ShopService {
 
     public List<Manufacturer> getAllManufacturers() {
         return manufacturerRepository.findAll();
+    }
+
+    public Manufacturer getManufacturerByName(String name) {
+        return manufacturerRepository.findByName(name);
     }
 }

@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * Created by Vladyslav Usenko on 26.09.2016.
@@ -16,6 +17,7 @@ public class EnumerableAttributeValue {
     private String value;
     @JsonIgnore
     private Attribute attribute;
+    private Set<AttributeValue> attributeValueSet;
 
     public EnumerableAttributeValue() {
     }
@@ -29,6 +31,12 @@ public class EnumerableAttributeValue {
         this.id = id;
         this.value = value;
         this.attribute = attribute;
+    }
+
+    public EnumerableAttributeValue(String value, Attribute attribute, Set<AttributeValue> attributeValueSet) {
+        this.value = value;
+        this.attribute = attribute;
+        this.attributeValueSet = attributeValueSet;
     }
 
     @Id
@@ -62,5 +70,14 @@ public class EnumerableAttributeValue {
 
     public void setAttribute(Attribute attribute) {
         this.attribute = attribute;
+    }
+
+    @OneToMany(mappedBy = "enumerableAttributeValue", cascade = CascadeType.ALL)
+    public Set<AttributeValue> getAttributeValueSet() {
+        return attributeValueSet;
+    }
+
+    public void setAttributeValueSet(Set<AttributeValue> attributeValueSet) {
+        this.attributeValueSet = attributeValueSet;
     }
 }

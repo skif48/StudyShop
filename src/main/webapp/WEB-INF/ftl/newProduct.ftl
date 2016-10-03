@@ -94,10 +94,10 @@
                             <label class="col-md-4 control-label" for="labelInput"> {{attribute.name}} : </label>
                             <div class="col-md-4">
                                 <div ng-if="attribute.inputType == 'TEXT'">
-                                    <input ng-attr-id="'input' + {{attribute.name}}" name="{{attribute.name}} "type="text" placeholder="{{attribute.name}}" class="form-control input-md" required/>
+                                    <input ng-attr-id="input{{attribute.name}}" name="{{attribute.name}} "type="text" placeholder="{{attribute.name}}" class="form-control input-md" required/>
                                 </div>
                                 <div ng-if="attribute.inputType == 'ENUMERABLE'">
-                                    <select class="form-control" id="enumerableAttributesSelect" name={{attribute.name}}>
+                                    <select class="form-control" ng-attr-id="input{{attribute.name}}" name={{attribute.name}}>
                                         <option ng-repeat="enumerable in attribute.enumerableAttributeValueSet" required>{{enumerable.value}}</option>
                                     </select>
                                 </div>

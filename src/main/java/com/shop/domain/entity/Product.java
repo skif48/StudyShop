@@ -3,6 +3,7 @@ package com.shop.domain.entity;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,6 +22,12 @@ public class Product {
     private Manufacturer manufacturer;
 
     public Product() {
+    }
+
+    public Product(ProductType type, String label, Manufacturer manufacturer){
+        this.type         = type;
+        this.label        = label;
+        this.manufacturer = manufacturer;
     }
 
     public Product(UUID uuid, ProductType type, String label, Manufacturer manufacturer) {
@@ -45,7 +52,7 @@ public class Product {
         return uuid.toString();
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "productType_id")
     public ProductType getType() {
         return type;

@@ -1,6 +1,7 @@
 'use strict';
 var myApp = angular.module('myApp', ['ngAnimate']);
 
+
 myApp.controller('CreateProductController', ['$scope', '$http', function($scope, $http) {
     $scope.data = {
         selection : null,
@@ -20,29 +21,52 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
         $http.get("/attributesOfType?typeName=" + $scope.data.selection)
         .then(function(response) {
             $scope.attributesOfType = response.data;
-        });
+        }, function(response){
+            console.log(response.textData);
+        }
+        );
     };
 
-    $scope.validation = function(product){
+    $scope.validation = function(product, attributes){
         for(attribute in $scope.attributesOfType){
-            if(!product[attribute]){
+            if(!attributes[attribute]){
                 return false;
             }
+        }
+
+        for(attribute in attributes) {
+
         }
 
         return true;
     };
 
     $scope.sendProductData = function(){
-        debugger;
         var product = {};
-        product.manufacturer = $scope.manufacturer;
-        console.log($scope.attributesOfType);
+        var attributes = {};
+        var uuid = null;
+        product.manufacturer = angular.element('#manufacturerSelect').val();
+        product.label = angular.element('#labelInput').val();
+        product.type = $scope.data.selection;
         for(var attribute in $scope.attributesOfType){
-            console.log(attribute);
-            product[attribute.name] = $scope[attribute.name];
+            console.log($scope.attributesOfType[attribute]);
+            var elementID = '#input' + $scope.attributesOfType[attribute].name;
+            attributes[$scope.attributesOfType[attribute].name] = angular.element(elementID).val();
         }
 
-        console.log(product);
+        product.attributes = attributes;
+
+        var config = {
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        };
+
+        $http.post('/addProduct', product, config).then(
+            function(response){
+                $scope.uuid = response.data;
+                console.log($scope.uuid);
+            }
+        );
     };
 }]);

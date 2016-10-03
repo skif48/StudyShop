@@ -60,7 +60,7 @@ public class Attribute {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "attributeValueID", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL)
     public Set<AttributeValue> getAttributeValueSet() {
         return attributeValueSet;
     }

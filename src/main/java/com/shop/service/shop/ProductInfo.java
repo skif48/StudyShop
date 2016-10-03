@@ -40,9 +40,12 @@ public class ProductInfo {
         this.attributeValueMap = attributeValueMap;
     }
 
-    public void manageAttributes(List<Object[]> values, Product product){
+    public void manageAttributes(List<Object[]> values, Product product, Map<String, String> enumerableAttributesValuesMap){
         for (Object[] attrVal : values) {
             Attribute attribute = new Attribute(attrVal[0].toString());
+            if(attrVal[1] == null){
+                attrVal[1] = enumerableAttributesValuesMap.get(attribute.getName());
+            }
             AttributeValue attributeValue = new AttributeValue(product, attribute, attrVal[1].toString());
             attributeValueMap.put(attribute, attributeValue);
         }

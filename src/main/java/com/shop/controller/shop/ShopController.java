@@ -3,6 +3,7 @@ package com.shop.controller.shop;
 import com.shop.domain.entity.*;
 import com.shop.domain.user.User;
 import com.shop.error.ServiceException;
+import com.shop.service.dataUtils.ProductRequest;
 import com.shop.service.shop.ProductInfo;
 import com.shop.service.user.UserService;
 import com.shop.utils.Tools;
@@ -56,11 +57,12 @@ public class ShopController {
 
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity putProduct(@RequestBody Product product, @RequestHeader(name = "type") ProductType type){
+    public ResponseEntity putProduct(@RequestBody ProductRequest productRequest){
         try{
-            shopService.putProduct(product, type);
-            return new ResponseEntity(HttpStatus.OK);
+            UUID uuid = shopService.putProduct(productRequest);
+            return new ResponseEntity<>(uuid, HttpStatus.OK);
         } catch (Exception exc){
+            exc.printStackTrace();
             return new ResponseEntity<>(exc, HttpStatus.OK);
         }
     }
@@ -84,6 +86,12 @@ public class ShopController {
         } else {
             return new ModelAndView("error");
         }
+    }
+
+    @RequestMapping(value ="/addAttributesToProduct", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity addAttributesToProduct(@RequestParam(value = "uuid") UUID uuid, @RequestBody Map<Attribute, AttributeValue> attributes){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)

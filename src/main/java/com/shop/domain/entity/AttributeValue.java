@@ -15,6 +15,7 @@ public class AttributeValue {
     private Product product;
     private Attribute attribute;
     private String value;
+    private EnumerableAttributeValue enumerableAttributeValue;
 
     public AttributeValue() {
     }
@@ -29,6 +30,11 @@ public class AttributeValue {
         this.value = value;
     }
 
+    public AttributeValue(Product product, Attribute attribute, EnumerableAttributeValue enumerableAttributeValue) {
+        this.product = product;
+        this.attribute = attribute;
+        this.enumerableAttributeValue = enumerableAttributeValue;
+    }
 
     @Id
     @NotNull
@@ -53,8 +59,8 @@ public class AttributeValue {
         this.product = product;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "attribute_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "attribute_id_foreign")
     public Attribute getAttribute() {
         return attribute;
     }
@@ -63,14 +69,23 @@ public class AttributeValue {
         this.attribute = attribute;
     }
 
-    @Column(name = "value")
-    @NotNull
+    @Column(name = "value", nullable = true)
     public String getValue() {
         return value;
     }
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "enumerable_attribute_value")
+    public EnumerableAttributeValue getEnumerableAttributeValue() {
+        return enumerableAttributeValue;
+    }
+
+    public void setEnumerableAttributeValue(EnumerableAttributeValue enumerableAttributeValue) {
+        this.enumerableAttributeValue = enumerableAttributeValue;
     }
 
     @Override
@@ -92,7 +107,8 @@ public class AttributeValue {
         int result = (int) (attributeValueID ^ (attributeValueID >>> 32));
         result = 31 * result + product.hashCode();
         result = 31 * result + attribute.hashCode();
-        result = 31 * result + value.hashCode();
+        if(value != null)
+            result = 31 * result + value.hashCode();
         return result;
     }
 }
