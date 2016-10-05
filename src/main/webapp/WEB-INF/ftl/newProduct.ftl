@@ -97,7 +97,7 @@
                                     <input ng-attr-id="input{{attribute.name}}" name="{{attribute.name}} "type="text" placeholder="{{attribute.name}}" class="form-control input-md" required/>
                                 </div>
                                 <div ng-if="attribute.inputType == 'ENUMERABLE'">
-                                    <select class="form-control" ng-attr-id="input{{attribute.name}}" name={{attribute.name}}>
+                                    <select class="form-control" ng-attr-id="select{{attribute.name}}" name={{attribute.name}}>
                                         <option ng-repeat="enumerable in attribute.enumerableAttributeValueSet" required>{{enumerable.value}}</option>
                                     </select>
                                 </div>
@@ -108,9 +108,21 @@
                 </div>
                 <div class="form-group">
                     <div class="row">
+                        <label class="col-md-4 control-label" for="imagesUpload">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
                             <input type="submit" class="btn btn-info" value="Create product" id="submitButton" ng-click="sendProductData()"/>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            {{inputError}}
                         </div>
                         <div class="col-md-4"></div>
                     </div>

@@ -8,6 +8,8 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
         manufacturerSelection : null
     };
 
+    $scope.inputError = "";
+
     $scope.attributesOfType = null;
     $scope.manufacturers    = null;
 
@@ -27,15 +29,18 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
         );
     };
 
-    $scope.validation = function(product, attributes){
-        for(attribute in $scope.attributesOfType){
-            if(!attributes[attribute]){
+    $scope.validation = function(attributes){
+        for(var attribute in $scope.attributesOfType){
+            if(!attributes[attribute] && attribute.inputType == 'TEXT'){
                 return false;
             }
         }
 
-        for(attribute in attributes) {
-
+        for(var attribute in attributes) {
+            var attributeString = attributes[attribute].toString();
+            if(isNaN(attributeString)){
+                return false;
+            }
         }
 
         return true;
@@ -43,30 +48,46 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
 
     $scope.sendProductData = function(){
         var product = {};
+        var attributesInput = {};
+        var attributesSelect = {};
         var attributes = {};
         var uuid = null;
         product.manufacturer = angular.element('#manufacturerSelect').val();
         product.label = angular.element('#labelInput').val();
         product.type = $scope.data.selection;
         for(var attribute in $scope.attributesOfType){
-            console.log($scope.attributesOfType[attribute]);
-            var elementID = '#input' + $scope.attributesOfType[attribute].name;
-            attributes[$scope.attributesOfType[attribute].name] = angular.element(elementID).val();
+            if( $scope.attributesOfType[attribute].inputType == 'TEXT'){
+                var elementID = '#input' + $scope.attributesOfType[attribute].name;
+                attributesInput[$scope.attributesOfType[attribute].name] = angular.element(elementID).val();
+            } else {
+                var elementID = '#select' + $scope.attributesOfType[attribute].name;
+                attributesSelect[$scope.attributesOfType[attribute].name] = angular.element(elementID).val();
+            }
         }
 
-        product.attributes = attributes;
-
-        var config = {
-            headers : {
-                'Content-Type' : 'application/json'
+        if($scope.validation(attributesInput)) {
+            var attributes = attributesInput;
+            for(var select in attributesSelect){
+                attributes[select] = attributesSelect[select];
             }
-        };
+            product.attributes = attributes;
 
-        $http.post('/addProduct', product, config).then(
-            function(response){
-                $scope.uuid = response.data;
-                window.location = "/product?uuid=" + $scope.uuid;
-            }
-        );
+            var config = {
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            };
+
+            $http.post('/addProduct', product, config).then(
+                function(response){
+                    debugger;
+                    $scope.uuid = response.data;
+                    console.log($scope.uuid.toString());
+                    window.location = "/product?uuid=" + $scope.uuid;
+                }
+            );
+        } else {
+            $scope.inputError = "Input Error. Check your values!";
+        }
     };
 }]);
