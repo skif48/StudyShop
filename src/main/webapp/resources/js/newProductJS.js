@@ -87,7 +87,7 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
                 }
             );
         } else {
-            $scope.inputError = "Input Error. Check your values!";
+            alert("Input Error. Check your values!");
         }
     };
 }]);
