@@ -74,6 +74,6 @@ public class ShopServiceIntegrationTest {
         shopService.setAttributeRepository(attributeRepository);
         shopService.setAttributeValueRepository(attributeValueRepository);
 
-        product = new Product(uuid, new ProductType("PHONE"), "Zenfone 2", manufacturer);
+        //product = new Product(uuid, new ProductType("PHONE"), "Zenfone 2", manufacturer);
     }
 }

@@ -9,12 +9,13 @@ import com.shop.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -94,9 +95,14 @@ public class ShopService {
         product.setLabel(productRequest.getLabel());
         product.setType(type);
         product.setManufacturer(manufacturer);
+        product.setPrice(Double.parseDouble(productRequest.getPrice()));
         UUID uuid = UUID.randomUUID();
         product.setUuid(uuid.toString());
-        productRepository.save(product);
+        product = productRepository.save(product);
+
+        long imageID = productRequest.getImageID();
+        ProductImage image = productImageRepository.findOne(imageID);
+        image.setProduct(product);
 
         Map<Attribute, AttributeValue> attributeValueMap = new HashMap<>();
         for(Attribute attribute : productRequest.getAttributes().keySet()){
@@ -209,7 +215,7 @@ public class ShopService {
         return productType.getAttributes();
     }
 
-    public void setImageToProduct(URL url, UUID uuid) throws IOException {
+    public void setImageToProductByURL(URL url, UUID uuid) throws IOException {
         byte[] imageInByte = Tools.imageToByteArray(ImageIO.read(url));
         Product product = getProductByUUID(uuid);
         ProductImage productImage = new ProductImage(product, imageInByte);
@@ -232,5 +238,16 @@ public class ShopService {
 
     public Manufacturer getManufacturerByName(String name) {
         return manufacturerRepository.findByName(name);
+    }
+
+    public long addImageByFile(MultipartFile uploadFile, UUID uuid) throws IOException {
+        ProductImage image;
+        if(uuid != null) {
+            image = new ProductImage(productRepository.findByUuid(uuid.toString()), uploadFile.getBytes());
+        } else {
+            image = new ProductImage(null, uploadFile.getBytes());
+        }
+        image = productImageRepository.save(image);
+        return image.getId();
     }
 }

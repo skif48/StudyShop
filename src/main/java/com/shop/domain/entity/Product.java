@@ -3,6 +3,7 @@ package com.shop.domain.entity;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -20,21 +21,28 @@ public class Product {
     private String label;
     private Set<ProductImage> images;
     private Manufacturer manufacturer;
+    private Double price;
 
     public Product() {
+        images = new HashSet<>();
     }
 
-    public Product(ProductType type, String label, Manufacturer manufacturer){
+    public Product(ProductType type, String label, Manufacturer manufacturer, Double price){
         this.type         = type;
         this.label        = label;
         this.manufacturer = manufacturer;
+        this.price = price;
+        this.images = new HashSet<>();
+
     }
 
-    public Product(UUID uuid, ProductType type, String label, Manufacturer manufacturer) {
+    public Product(UUID uuid, ProductType type, String label, Manufacturer manufacturer, Double price) {
         this.uuid = uuid.toString();
         this.type = type;
         this.label = label;
         this.manufacturer = manufacturer;
+        this.price = price;
+        this.images = new HashSet<>();
     }
 
     @Id
@@ -64,7 +72,7 @@ public class Product {
         return label;
     }
 
-    @OneToMany(mappedBy = "id",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     public Set<ProductImage> getImages() {
         return images;
     }
@@ -99,18 +107,17 @@ public class Product {
         this.manufacturer = manufacturer;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public void changeProduct(Product product){
         setLabel(product.getLabel());
         setType(product.getType());
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                " uuid=" + uuid +
-                ", type=" + type +
-                ", label='" + label + '\'' +
-                '}';
     }
 
     @Override
@@ -123,7 +130,9 @@ public class Product {
         if (productID != product.productID) return false;
         if (!uuid.equals(product.uuid)) return false;
         if (!type.equals(product.type)) return false;
-        return label.equals(product.label);
+        if (!label.equals(product.label)) return false;
+        if (!manufacturer.equals(product.manufacturer)) return false;
+        return price.equals(product.price);
 
     }
 
@@ -133,6 +142,20 @@ public class Product {
         result = 31 * result + uuid.hashCode();
         result = 31 * result + type.hashCode();
         result = 31 * result + label.hashCode();
+        result = 31 * result + manufacturer.hashCode();
+        result = 31 * result + price.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productID=" + productID +
+                ", uuid='" + uuid + '\'' +
+                ", type=" + type +
+                ", label='" + label + '\'' +
+                ", manufacturer=" + manufacturer +
+                ", price=" + price +
+                '}';
     }
 }

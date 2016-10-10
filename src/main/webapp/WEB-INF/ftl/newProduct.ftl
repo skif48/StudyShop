@@ -61,7 +61,7 @@
         </div>
     </nav>
     <div class="container">
-        <form class="form-horizontal" role="form" ng-controller="CreateProductController">
+        <form class="form-horizontal" id="productCreateForm" role="form" ng-controller="CreateProductController">
             <fieldset>
                 <legend>Create Product</legend>
                 <div class="form-group">
@@ -76,6 +76,12 @@
                     <label class="col-md-4 control-label" for="labelInput">Label: </label>
                     <div class="col-md-4">
                         <input id="labelInput" type="text" name="label" placeholder="label" class="form-control input-md" required autofocus/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="priceInput">Price: </label>
+                    <div class="col-md-4">
+                        <input id="priceInput" type="text" name="price" placeholder="price" class="form-control input-md" required/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -108,7 +114,13 @@
                 </div>
                 <div class="form-group">
                     <div class="row">
-                        <label class="col-md-4 control-label" for="imagesUpload">
+                        <label class="col-md-4 control-label" for="imageUpload"> Image : </label>
+                        <div class="col-md-4">
+                            <input id="imageUpload" type="file" name="imageUploadad" accept="image/*" />
+                        </div>
+                        <div class="col-md-4">
+                            <input type="submit" class="btn btn-info" value="Upload image" id="imageButton" ng-click="uploadImage()"/>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -116,13 +128,6 @@
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
                             <input type="submit" class="btn btn-info" value="Create product" id="submitButton" ng-click="sendProductData()"/>
-                        </div>
-                        <div class="col-md-4"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4">
-                            {{inputError}}
                         </div>
                         <div class="col-md-4"></div>
                     </div>

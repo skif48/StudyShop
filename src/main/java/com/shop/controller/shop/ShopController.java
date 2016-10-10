@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -160,10 +161,16 @@ public class ShopController {
         return new ResponseEntity<>(attributes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/addImage", method = RequestMethod.POST)
-    public ResponseEntity addImageToProduct(@RequestParam(value = "uuid") UUID uuid, @RequestHeader(value = "imageURL") URL url) throws IOException {
-        shopService.setImageToProduct(url, uuid);
+    @RequestMapping(value = "/addImageByURL", method = RequestMethod.POST)
+    public ResponseEntity addImageToProductByURL(@RequestParam(value = "uuid") String uuid, @RequestHeader(value = "imageURL") URL url) throws IOException {
+        shopService.setImageToProductByURL(url, UUID.fromString(uuid));
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/addImageByFile", method = RequestMethod.POST)
+    public ResponseEntity addImageByFile(@RequestParam(value = "imageUploadad") MultipartFile uploadFile) throws IOException {
+        long id = shopService.addImageByFile(uploadFile, null);
+        return new ResponseEntity<>(Long.toString(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getImage/{productUUID}", method = RequestMethod.GET)

@@ -12,18 +12,22 @@ import java.util.Map;
  */
 public class ProductRequest {
     private ProductType type;
+    private String price;
     private String label;
     private Manufacturer manufacturer;
     private Map<Attribute, AttributeValue> attributes;
+    private Long imageID;
 
     public ProductRequest() {
     }
 
-    public ProductRequest(ProductType type, String label, Map<Attribute, AttributeValue> attributes, Manufacturer manufacturer) {
+    public ProductRequest(ProductType type, String price, String label, Manufacturer manufacturer, Map<Attribute, AttributeValue> attributes, Long imageID) {
         this.type = type;
+        this.price = price;
         this.label = label;
-        this.attributes = attributes;
         this.manufacturer = manufacturer;
+        this.attributes = attributes;
+        this.imageID = imageID;
     }
 
     public ProductType getType() {
@@ -56,5 +60,21 @@ public class ProductRequest {
 
     public void setManufacturer(Manufacturer manufacturer) {
         this.manufacturer = manufacturer;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public Long getImageID() {
+        return imageID;
+    }
+
+    public void setImageID(Long imageID) {
+        this.imageID = imageID;
     }
 }
