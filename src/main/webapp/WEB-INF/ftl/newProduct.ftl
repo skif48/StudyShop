@@ -119,7 +119,7 @@
                             <input id="imageUpload" type="file" name="imageUploadad" accept="image/*" />
                         </div>
                         <div class="col-md-4">
-                            <input type="submit" class="btn btn-info" value="Upload image" id="imageButton" ng-click="uploadImage()"/>
+                            <input type="submit" class="btn btn-info" value="Upload image" id="imageButton"  ng-click="uploadImage()"/>
                         </div>
                     </div>
                 </div>

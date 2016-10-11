@@ -1,40 +1,7 @@
 'use strict';
 var myApp = angular.module('myApp', ['ngAnimate']);
-myApp.directive('fileModel', ['$parse', function($parse) {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-            var model = $parse(attrs.fileModel);
-            var modelSetter = model.assign;
-            element.bind('change', function() {
-                scope.$apply(function() {
-                    modelSetter(scope, element[0].files[0]);
-                });
-            });
-        }
-    };
-}
-]);
 
-myApp.service('fileUpload', ['$http', function($http) {
-    this.uploadFileToUrl = function(file, uploadUrl) {
-        var fd = new FormData();
-        fd.append('file', file);
-        $http.post(uploadUrl, fd, {
-            transformRequest: angular.identity,
-            headers: {
-                'Content-Type': undefined
-            }
-        }).success(function(response) {
-            console.log(response.textData);
-        }).error(function(response) {
-            console.log(response.toString());
-        });
-    }
-}
-]);
-
-myApp.controller('CreateProductController', ['$scope', '$http', 'fileUpload', function($scope, $http, fileUpload) {
+myApp.controller('CreateProductController', ['$scope', '$http', function($scope, $http) {
     $scope.data = {
         selection: null ,
         manufacturerSelection: null
@@ -74,6 +41,11 @@ myApp.controller('CreateProductController', ['$scope', '$http', 'fileUpload', fu
     };
 
     $scope.sendProductData = function() {
+        if ($scope.isImageSet == false){
+            alert("Upload image!");
+            return;
+        }
+
         var product = {};
         var attributesInput = {};
         var attributesSelect = {};
@@ -123,23 +95,31 @@ myApp.controller('CreateProductController', ['$scope', '$http', 'fileUpload', fu
     };
 
     $scope.uploadImage = function() {
-        $.ajax({
-                url: "/addImageByFile",
-                type: "POST",
-                data: new FormData($("#productCreateForm")[0]),
-                enctype: 'multipart/form-data',
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (response) {
-                  // Handle upload success
-                  $scope.isImageSet = true;
-                  $scope.imageID = response.toString();
-                },
-                error: function (response) {
-                  // Handle upload error
-                  console.log(response.toString());
-                }
-        });
+        var dataSend = new FormData($("#productCreateForm")[0]);
+        for(var pair of dataSend.entries()) {
+            if(pair[0] = "imageUploadad" && pair[1].size == 0) {
+               alert('No image selected!');
+               return;
+            }
+        }
+        var ajaxObj = {
+            url: "/addImageByFile",
+            type: "POST",
+            data: dataSend,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(response) {
+                    // Handle upload success
+                        $scope.isImageSet = true;
+                        $scope.imageID = response.toString();
+                    },
+            error: function(response) {
+                        // Handle upload error
+                        console.log(response.toString());
+                   }
+            };
+            $.ajax(ajaxObj);
     };
 }]);
