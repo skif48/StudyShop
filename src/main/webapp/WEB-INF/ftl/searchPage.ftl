@@ -93,10 +93,10 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="priceInput">Price: </label>
                     <div class="col-md-2">
-                        <input id="priceFrom" type="text" class="form-control" placeholder="from..." required>
+                        <input id="priceFrom" name="priceFromInput type="text" class="form-control" placeholder="from..." required>
                     </div>
                     <div class="col-md-2">
-                        <input id="priceTo" type="text" name="priceInput" class="form-control" placeholder="to..." required>
+                        <input id="priceTo" type="text" name="priceToInput" class="form-control" placeholder="to..." required>
                     </div>
                 </div>
                 <div ng-if="data.manufacturersOfType != null">
@@ -126,7 +126,7 @@
                             <div ng-if="attribute.inputType == 'ENUMERABLE'">
                                 <div class="col-md-4">
                                     <div class="checkbox" ng-repeat="enumerable in attribute.enumerableAttributeValueSet">
-                                        <label><input ng-attr-id="checkBox{{attribute.name}}" name="{{attribute.name}}" type="checkbox" value=""/>{{enumerable.value}}
+                                        <div><label><input ng-attr-id="checkBox{{attribute.name}}" name="checkBox{{attribute.name}}" type="checkbox" ng-model="enumerable.selected" value="{{enumerable.value}}"/>{{enumerable.value}}</label></div>
                                     </div>
                                 </div>
                             </div>
