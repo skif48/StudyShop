@@ -14,17 +14,17 @@ public class AttributeValue {
     private long attributeValueID;
     private Product product;
     private Attribute attribute;
-    private String value;
+    private Integer value;
     private EnumerableAttributeValue enumerableAttributeValue;
 
     public AttributeValue() {
     }
 
-    public AttributeValue(String value) {
+    public AttributeValue(Integer value) {
         this.value = value;
     }
 
-    public AttributeValue(Product product, Attribute attribute, String value) {
+    public AttributeValue(Product product, Attribute attribute, Integer value) {
         this.product = product;
         this.attribute = attribute;
         this.value = value;
@@ -70,11 +70,11 @@ public class AttributeValue {
     }
 
     @Column(name = "value", nullable = true)
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 

@@ -4,6 +4,7 @@ import com.shop.domain.entity.*;
 import com.shop.error.ErrorCode;
 import com.shop.error.ServiceException;
 import com.shop.repository.products.*;
+import com.shop.service.dataUtils.ManufacturerRequest;
 import com.shop.service.dataUtils.ProductRequest;
 import com.shop.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +160,16 @@ public class ShopService {
         return productRepository.findAll();
     }
 
+    public List<ProductInfo> getAllProductsInfo() throws ServiceException {
+        ArrayList<Product> products = new ArrayList<>(productRepository.findAll());
+        ArrayList<ProductInfo> infos = new ArrayList<>();
+        for(Product p : products){
+            infos.add(getProductFullInfo(UUID.fromString(p.getUuid())));
+        }
+
+        return infos;
+    }
+
     public void deleteProductByUUID(UUID uuid) {
         productRepository.deleteByUuid(uuid.toString());
     }
@@ -249,5 +260,22 @@ public class ShopService {
         }
         image = productImageRepository.save(image);
         return image.getId();
+    }
+
+    public void addManufacturer(ManufacturerRequest manufacturerRequest){
+        Set<ProductType> types = new HashSet<>();
+        for(ProductType type : manufacturerRequest.getTypes()){
+            types.add(productTypeRepository.findByTypeName(type.getName()));
+        }
+
+        Manufacturer manufacturer = new Manufacturer();
+        manufacturer.setName(manufacturerRequest.getName());
+        manufacturer.setTypeSet(types);
+        manufacturerRepository.save(manufacturer);
+    }
+
+    public List<Manufacturer> getManufacturersOfType(String type) {
+        ProductType productType = productTypeRepository.findByTypeName(type);
+        return new ArrayList<>(productType.getManufacturers());
     }
 }

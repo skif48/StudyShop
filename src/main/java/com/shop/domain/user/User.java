@@ -64,6 +64,10 @@ public class User {
         this.role = role;
     }
 
+    public boolean isAdmin(){
+        return this.role == Role.ADMIN;
+    }
+
     @Override
     public String toString() {
         return "User{" +

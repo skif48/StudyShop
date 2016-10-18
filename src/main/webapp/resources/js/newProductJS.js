@@ -66,7 +66,7 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
         for (var attribute in $scope.attributesOfType) {
             if ($scope.attributesOfType[attribute].inputType == 'TEXT') {
                 var elementID = '#input' + $scope.attributesOfType[attribute].name;
-                attributesInput[$scope.attributesOfType[attribute].name] = angular.element(elementID).val();
+                attributesInput[$scope.attributesOfType[attribute].name] = parseFloat(angular.element(elementID).val());
             } else {
                 var elementID = '#select' + $scope.attributesOfType[attribute].name;
                 attributesSelect[$scope.attributesOfType[attribute].name] = angular.element(elementID).val();

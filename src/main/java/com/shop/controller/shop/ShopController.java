@@ -3,6 +3,7 @@ package com.shop.controller.shop;
 import com.shop.domain.entity.*;
 import com.shop.domain.user.User;
 import com.shop.error.ServiceException;
+import com.shop.service.dataUtils.ManufacturerRequest;
 import com.shop.service.dataUtils.ProductRequest;
 import com.shop.service.shop.ProductInfo;
 import com.shop.service.user.UserService;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,10 +40,19 @@ public class ShopController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView welcome(){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("home");
-        return mav;
+    public ModelAndView welcome(@ModelAttribute(name = "allProducts") ModelMap map, Principal principal) throws ServiceException {
+        List<ProductInfo> productInfos = shopService.getAllProductsInfo();
+        List<Product> products = new ArrayList<>();
+        for(ProductInfo productInfo : productInfos){
+            products.add(productInfo.getProduct());
+        }
+        map.addAttribute("allProducts", products);
+        if(principal != null) {
+            String userName = principal.getName();
+            User user = userService.getUserByEmail(userName).get();
+            map.addAttribute("user", user);
+        }
+        return new ModelAndView("home", map);
     }
 
     @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
@@ -148,7 +159,8 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/matchTypeAndAttribute", method = RequestMethod.PUT)
-    public ResponseEntity matchTypeAndAttribute(@RequestParam(value = "typeName") String type, @RequestHeader(value = "attributeName") String attribute){
+    public ResponseEntity matchTypeAndAttribute(@RequestParam(value = "typeName") String type,
+                                                @RequestHeader(value = "attributeName") String attribute){
         ProductType productType = shopService.getTypeByName(type);
         Attribute attributeByName = shopService.getAttributeByName(attribute);
         shopService.matchTypeAndAttribute(productType, attributeByName);
@@ -189,6 +201,31 @@ public class ShopController {
     @RequestMapping(value ="/manufacturers", method = RequestMethod.GET)
     public ResponseEntity getManufacturers(){
         ArrayList<Manufacturer> manufacturers = new ArrayList<>(shopService.getAllManufacturers());
+        return new ResponseEntity<>(manufacturers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value ="/advancedSearch", method = RequestMethod.GET)
+    public ModelAndView advancedSearchPage(@ModelAttribute ModelMap map, Principal principal){
+        if(principal != null) {
+            String userName = principal.getName();
+            User user = userService.getUserByEmail(userName).get();
+            map.addAttribute("user", user);
+        }
+
+        List<ProductType> productTypes = shopService.getAllProductTypes();
+        map.addAttribute("productTypes", productTypes);
+        return new ModelAndView("searchPage", map);
+    }
+
+    @RequestMapping(value ="/addManufacturer", method = RequestMethod.POST)
+    public ResponseEntity addManufacturer(@RequestBody ManufacturerRequest manufacturerRequest){
+        shopService.addManufacturer(manufacturerRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getManufacturersOfType", method = RequestMethod.GET)
+    public ResponseEntity getManufacturersOfType(@RequestParam(value = "type") String type) {
+        List<Manufacturer> manufacturers = shopService.getManufacturersOfType(type);
         return new ResponseEntity<>(manufacturers, HttpStatus.OK);
     }
 }

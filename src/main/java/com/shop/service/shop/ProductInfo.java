@@ -46,7 +46,7 @@ public class ProductInfo {
             if(attrVal[1] == null){
                 attrVal[1] = enumerableAttributesValuesMap.get(attribute.getName());
             }
-            AttributeValue attributeValue = new AttributeValue(product, attribute, attrVal[1].toString());
+            AttributeValue attributeValue = new AttributeValue(product, attribute, Integer.parseInt(attrVal[1].toString()));
             attributeValueMap.put(attribute, attributeValue);
         }
     }

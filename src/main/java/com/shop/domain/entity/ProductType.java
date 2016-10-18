@@ -1,5 +1,6 @@
 package com.shop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,6 +19,8 @@ public class ProductType {
     private long typeID;
     private String name;
     private Set<Attribute> attributes;
+    @JsonIgnore
+    private Set<Manufacturer> manufacturers;
 
     public ProductType() {
         attributes = new HashSet<>();
@@ -61,7 +64,12 @@ public class ProductType {
         this.attributes = attributes;
     }
 
-    public List<Attribute> obtainListOfAttributes(){
-        return new ArrayList<>(attributes);
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "typeSet")
+    public Set<Manufacturer> getManufacturers() {
+        return manufacturers;
+    }
+
+    public void setManufacturers(Set<Manufacturer> manufacturers) {
+        this.manufacturers = manufacturers;
     }
 }
