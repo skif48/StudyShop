@@ -16,18 +16,20 @@ public class ProductRequest {
     private String label;
     private Manufacturer manufacturer;
     private Map<Attribute, AttributeValue> attributes;
+    private Map<Attribute, String> enumerableAttributes;
     private Long imageID;
 
     public ProductRequest() {
     }
 
-    public ProductRequest(ProductType type, String price, String label, Manufacturer manufacturer, Map<Attribute, AttributeValue> attributes, Long imageID) {
+    public ProductRequest(ProductType type, String price, String label, Manufacturer manufacturer, Map<Attribute, AttributeValue> attributes, Long imageID, Map<Attribute, String> enumerableAttributes) {
         this.type = type;
         this.price = price;
         this.label = label;
         this.manufacturer = manufacturer;
         this.attributes = attributes;
         this.imageID = imageID;
+        this.enumerableAttributes = enumerableAttributes;
     }
 
     public ProductType getType() {
@@ -76,5 +78,13 @@ public class ProductRequest {
 
     public void setImageID(Long imageID) {
         this.imageID = imageID;
+    }
+
+    public Map<Attribute, String> getEnumerableAttributes() {
+        return enumerableAttributes;
+    }
+
+    public void setEnumerableAttributes(Map<Attribute, String> enumerableAttributes) {
+        this.enumerableAttributes = enumerableAttributes;
     }
 }

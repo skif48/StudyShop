@@ -93,7 +93,11 @@
                        <#list attributeValues as attributeValue>
                            <tr>
                                <td>${attributes[y].name}</td>
-                               <td>${attributeValue.value}</td>
+                               <#if attributeValue.value??>
+                                   <td>${attributeValue.value}</td>
+                               <#else>
+                                   <td>${attributeValue.getEnumerableAttributeValue().getValue()}</td>
+                               </#if>
                            </tr>
                            <#assign y++>
                        </#list>

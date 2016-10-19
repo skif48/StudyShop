@@ -23,6 +23,10 @@ public class EnumerableAttributeValue {
     public EnumerableAttributeValue() {
     }
 
+    public EnumerableAttributeValue(String value){
+        this.value = value;
+    }
+
     public EnumerableAttributeValue(String value, Attribute attribute) {
         this.value = value;
         this.attribute = attribute;

@@ -50,6 +50,7 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
         var attributesInput = {};
         var attributesSelect = {};
         var attributes = {};
+        var enumerableAttributes = {};
         var uuid = null ;
 
         product.manufacturer = angular.element('#manufacturerSelect').val();
@@ -69,16 +70,13 @@ myApp.controller('CreateProductController', ['$scope', '$http', function($scope,
                 attributesInput[$scope.attributesOfType[attribute].name] = parseFloat(angular.element(elementID).val());
             } else {
                 var elementID = '#select' + $scope.attributesOfType[attribute].name;
-                attributesSelect[$scope.attributesOfType[attribute].name] = angular.element(elementID).val();
+                enumerableAttributes[$scope.attributesOfType[attribute].name] = angular.element(elementID).val();
             }
         }
 
         if ($scope.validation(attributesInput)) {
-            var attributes = attributesInput;
-            for (var select in attributesSelect) {
-                attributes[select] = attributesSelect[select];
-            }
-            product.attributes = attributes;
+            product.attributes = attributesInput;
+            product.enumerableAttributes = enumerableAttributes;
 
             var config = {
                 headers: {

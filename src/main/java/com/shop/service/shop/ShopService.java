@@ -108,16 +108,17 @@ public class ShopService {
         Map<Attribute, AttributeValue> attributeValueMap = new HashMap<>();
         for(Attribute attribute : productRequest.getAttributes().keySet()){
             Attribute temp = attributeRepository.findByName(attribute.getName());
-            if(temp.getEnumerableAttributeValueSet().isEmpty())
-                attributeValueMap.put(temp, new AttributeValue(productRepository.findByUuid(uuid.toString()), temp, productRequest.getAttributes().get(attribute).getValue()));
-            else {
-                List<Object> enumerableAttributeValuesByName = new ArrayList<>(enumerableAttributeValueRepository.findEnumerableAttributeValueByName(temp.getName()));
-                for(Object obj : enumerableAttributeValuesByName){
-                    Long id = Long.parseLong(obj.toString());
-                    EnumerableAttributeValue enumerableAttributeValue = enumerableAttributeValueRepository.findOne(id);
-                    if(enumerableAttributeValue.getValue().equals(productRequest.getAttributes().get(attribute).getValue())){
-                        attributeValueMap.put(temp, new AttributeValue(productRepository.findByUuid(uuid.toString()), temp, enumerableAttributeValue));
-                    }
+            attributeValueMap.put(temp, new AttributeValue(productRepository.findByUuid(uuid.toString()), temp, productRequest.getAttributes().get(attribute).getValue()));
+        }
+
+        for(Attribute attribute : productRequest.getEnumerableAttributes().keySet()){
+            Attribute temp = attributeRepository.findByName(attribute.getName());
+            List<Object> enumerableAttributeValuesByName = new ArrayList<>(enumerableAttributeValueRepository.findEnumerableAttributeValueByName(temp.getName()));
+            for(Object obj : enumerableAttributeValuesByName){
+                Long id = Long.parseLong(obj.toString());
+                EnumerableAttributeValue enumerableAttributeValue = enumerableAttributeValueRepository.findOne(id);
+                if(enumerableAttributeValue.getValue().equals(productRequest.getEnumerableAttributes().get(attribute))){
+                    attributeValueMap.put(temp, new AttributeValue(productRepository.findByUuid(uuid.toString()), temp, enumerableAttributeValue));
                 }
             }
         }

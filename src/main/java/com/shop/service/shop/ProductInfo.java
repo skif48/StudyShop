@@ -2,6 +2,7 @@ package com.shop.service.shop;
 
 import com.shop.domain.entity.Attribute;
 import com.shop.domain.entity.AttributeValue;
+import com.shop.domain.entity.EnumerableAttributeValue;
 import com.shop.domain.entity.Product;
 
 import java.util.HashMap;
@@ -46,8 +47,14 @@ public class ProductInfo {
             if(attrVal[1] == null){
                 attrVal[1] = enumerableAttributesValuesMap.get(attribute.getName());
             }
-            AttributeValue attributeValue = new AttributeValue(product, attribute, Integer.parseInt(attrVal[1].toString()));
-            attributeValueMap.put(attribute, attributeValue);
+            try {
+                AttributeValue attributeValue = new AttributeValue(product, attribute, Integer.parseInt(attrVal[1].toString()));
+                attributeValueMap.put(attribute, attributeValue);
+            } catch (NumberFormatException exc){
+                AttributeValue attributeValue = new AttributeValue(product, attribute, new EnumerableAttributeValue(attrVal[1].toString()));
+                attributeValueMap.put(attribute, attributeValue);
+            }
+
         }
     }
 
