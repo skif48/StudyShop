@@ -230,8 +230,20 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseEntity search(@RequestParam(value = "q") String q) throws ServiceException {
+    public ModelAndView search(@ModelAttribute(name = "allProducts") ModelMap map, Principal principal,
+                               @RequestParam(value = "q") String q) throws ServiceException {
         List<ProductInfo> productInfos = shopService.searchByLabel(q);
-        return new ResponseEntity<>(productInfos, HttpStatus.OK);
+        List<Product> products = new ArrayList<>();
+        for(ProductInfo productInfo : productInfos){
+            products.add(productInfo.getProduct());
+        }
+        map.addAttribute("allProducts", products);
+        map.addAttribute("query", q);
+        if(principal != null) {
+            String userName = principal.getName();
+            User user = userService.getUserByEmail(userName).get();
+            map.addAttribute("user", user);
+        }
+        return new ModelAndView("searchResults", map);
     }
 }

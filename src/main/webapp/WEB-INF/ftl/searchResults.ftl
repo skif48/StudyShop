@@ -1,6 +1,7 @@
 <#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 <#-- @ftlvariable name="user" type="com.shop.domain.user.User" -->
 <#-- @ftlvariable name="allProducts" type="java.util.List<Product>" -->
+<#-- @ftlvariable name="query" type="java.lang.String" -->
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -15,15 +16,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="resources/css/homeCSS.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/searchResultsCSS.css">
     <!-- JS -->
-    <script src="resources/js/homeJS.js"></script>
+    <script src="resources/js/searchResultsJS.js"></script>
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body ng-app="homePageApp">
+<body ng-app="searchResultsPageApp">
     <nav class="navbar navbar-default" role="navigation" ng-controller="SearchController">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -77,6 +78,7 @@
     </div><!-- /.navbar-collapse -->
 </nav>
     <div class="container">
+        <legend>Search results for query "${query}": </legend>
         <#if allProducts?size <= 3>
             <#assign rowsCount = 1>
         <#else>
