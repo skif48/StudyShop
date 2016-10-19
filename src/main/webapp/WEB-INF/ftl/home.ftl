@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="user" type="com.shop.domain.user.User" -->
 <#-- @ftlvariable name="allProducts" type="java.util.List<Product>" -->
 <!DOCTYPE HTML>
-<html ng-app="app">
+<html>
 <head>
     <title>Simple Shop Simulation</title>
     <!-- Latest compiled and minified CSS -->
@@ -13,6 +13,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="resources/css/homeCSS.css">
     <!-- JS -->
@@ -22,8 +23,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
-    <nav class="navbar navbar-default" role="navigation">
+<body ng-app="homePageApp">
+    <nav class="navbar navbar-default" role="navigation" ng-controller="SearchController">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -40,9 +41,9 @@
         <div class="col-sm-3 col-md-3">
             <form class="navbar-form">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input id="searchID" type="text" class="form-control" placeholder="Search">
                     <div class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        <button class="btn btn-default" type="submit" ng-click="search()""><i class="glyphicon glyphicon-search"></i></button>
                     </div>
                 </div>
             </form>

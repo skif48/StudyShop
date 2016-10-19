@@ -228,4 +228,10 @@ public class ShopController {
         List<Manufacturer> manufacturers = shopService.getManufacturersOfType(type);
         return new ResponseEntity<>(manufacturers, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ResponseEntity search(@RequestParam(value = "q") String q) throws ServiceException {
+        List<ProductInfo> productInfos = shopService.searchByLabel(q);
+        return new ResponseEntity<>(productInfos, HttpStatus.OK);
+    }
 }

@@ -279,4 +279,19 @@ public class ShopService {
         ProductType productType = productTypeRepository.findByTypeName(type);
         return new ArrayList<>(productType.getManufacturers());
     }
+
+    public List<ProductInfo> searchByLabel(String label) throws ServiceException {
+        List<Product> products = productRepository.findByLabel(label);
+        List<String> uuids = new ArrayList<>();
+        for(Product product : products){
+            uuids.add(product.getUuid());
+        }
+        List<ProductInfo> productInfo = new ArrayList<>();
+        for(String uuid : uuids){
+            ProductInfo temp = getProductFullInfo(UUID.fromString(uuid));
+            productInfo.add(temp);
+        }
+
+        return productInfo;
+    }
 }

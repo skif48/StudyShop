@@ -302,4 +302,9 @@ public class ProductRepositoryStub implements ProductRepository {
     public <S extends Product> boolean exists(Example<S> example) {
         return false;
     }
+
+    @Override
+    public List<Product> findByLabel(@Param("label") String label) {
+        return null;
+    }
 }

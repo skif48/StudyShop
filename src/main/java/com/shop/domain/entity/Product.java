@@ -1,5 +1,6 @@
 package com.shop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class Product {
     private String uuid;
     private ProductType type;
     private String label;
+    @JsonIgnore
     private Set<ProductImage> images;
     private Manufacturer manufacturer;
     private Double price;

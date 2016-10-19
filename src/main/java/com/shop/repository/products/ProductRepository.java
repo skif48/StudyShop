@@ -30,4 +30,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Transactional
     @Query("select p from Product p where p.type = :type")
     List<Product> findByType(@Param("type") ProductType type);
+
+    @Transactional
+    @Query("select p from Product p where p.label like %:label%")
+    List<Product> findByLabel(@Param("label") String label);
 }
