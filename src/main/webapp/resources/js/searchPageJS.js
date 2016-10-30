@@ -49,10 +49,101 @@ searchPageApp.controller('SearchProductController', ['$scope', '$http', function
             }
         }
 
+        for(var manufacturer in $scope.data.manufacturersOfType){
+            if($scope.data.manufacturersOfType[manufacturer].selected){
+                manufacturers.push($scope.data.manufacturersOfType[manufacturer].name);
+            }
+        }
+
         searchRequest["manufacturers"] = manufacturers;
         searchRequest["priceFrom"] = priceFrom;
         searchRequest["priceTo"] = priceTo;
         searchRequest["attributesFromTo"] = attributesFromTo;
         searchRequest["checkedEnumerableAttributes"] = checkedEnumerableAttributes;
+
+        var url = "/advancedSearchResults";
+        if(searchRequest["manufacturers"].length != 0){
+            var counter = 0;
+            for(var manufacturer in searchRequest["manufacturers"]){
+                if(counter == 0){
+                    url = url + "?manufacturer=";
+                    url = url + searchRequest["manufacturers"][manufacturer];
+                } else {
+                    url = url + "&manufacturer="
+                    url = url + searchRequest["manufacturers"][manufacturer];
+                }
+
+                counter++;
+            }
+        } else {
+            for(var manufacturer in $scope.data.manufacturersOfType){
+                if(counter == 0){
+                    url = url + "?manufacturer=";
+                    url = url + $scope.data.manufacturersOfType[manufacturer].name;
+                } else {
+                    url = url + "&manufacturer="
+                    url = url + $scope.data.manufacturersOfType[manufacturer].name;
+                }
+
+                counter++;
+            }
+        }
+
+        url = url + "&type=" + $scope.data.typeSelection;
+
+        if(isNaN(searchRequest["priceFrom"]))
+            url = url + "&priceFrom=0";
+        else
+            url = url + "&priceFrom=" + searchRequest["priceFrom"];
+
+        if(searchRequest["priceTo"] != undefined)
+            url = url + "&priceTo=2147483647";
+        else
+            url = url + "&priceTo=" + searchRequest["priceTo"];
+
+        for(var attribute in searchRequest["attributesFromTo"]){
+            if(isNaN(searchRequest["attributesFromTo"][attribute][0])){
+                url = url + "&" + attribute + "From" + "=";
+                url = url + "0";
+            } else {
+                url = url + "&" + attribute + "From" + "=";
+                url = url + searchRequest["attributesFromTo"][attribute][0];
+            }
+
+            if(isNaN(searchRequest["attributesFromTo"][attribute][1])){
+                url = url + "&" + attribute + "To" + "=";
+                url = url + "2147483647"
+            } else {
+                url = url + "&" + attribute + "To" + "=";
+                url = url + searchRequest["attributesFromTo"][attribute][1];
+            }
+        }
+
+        function isEmptyObject(obj) {
+            return Object.getOwnPropertyNames(obj).length === 0;
+        }
+
+        for(var checked in searchRequest["checkedEnumerableAttributes"]){
+            if(searchRequest["checkedEnumerableAttributes"][checked].length == 0){
+                for(var attribute in $scope.data.attributesOfType){
+                    if($scope.data.attributesOfType[attribute].name == checked){
+                        for(var enumerable in $scope.data.attributesOfType[attribute].enumerableAttributeValueSet){
+                            url = url + "&" + $scope.data.attributesOfType[attribute].name + "=" + $scope.data.attributesOfType[attribute].enumerableAttributeValueSet[enumerable].value;
+                        }
+                    }
+                }
+            } else {
+                for(var checked in searchRequest["checkedEnumerableAttributes"]){
+                    var counter = 0;
+                    for(var value in searchRequest["checkedEnumerableAttributes"][checked]){
+                        url = url + "&" + checked + "=";
+                        var temp = searchRequest["checkedEnumerableAttributes"][checked][value];
+                        url = url + temp;
+                        counter++;
+                    }
+                }
+            }
+        }
+        window.location = url;
     };
 }]);

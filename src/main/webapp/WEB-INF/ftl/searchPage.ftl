@@ -93,10 +93,10 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="priceInput">Price: </label>
                     <div class="col-md-2">
-                        <input id="priceFrom" name="priceFromInput type="text" class="form-control" placeholder="from..." required>
+                        <input id="priceFrom" name="priceFromInput type="text" class="form-control" placeholder="from...">
                     </div>
                     <div class="col-md-2">
-                        <input id="priceTo" type="text" name="priceToInput" class="form-control" placeholder="to..." required>
+                        <input id="priceTo" type="text" name="priceToInput" class="form-control" placeholder="to...">
                     </div>
                 </div>
                 <div ng-if="data.manufacturersOfType != null">
@@ -105,7 +105,7 @@
                         <div class="col-md-4">
                             <div ng-repeat="manufacturer in data.manufacturersOfType">
                                 <div class="checkbox">
-                                    <label><input ng-attr-id="checkBox{{manufacturer.name}}" name="{{manufacturer.name}}" type="checkbox" value=""/>{{manufacturer.name}}</label>
+                                    <label><input ng-attr-id="checkBox{{manufacturer.name}}" name="{{manufacturer.name}}" type="checkbox" ng-model="manufacturer.selected" value=""/>{{manufacturer.name}}</label>
                                 </div>
                             </div>
                         </div>
@@ -117,10 +117,10 @@
                             <label class="col-md-4 control-label" for="labelInput"> {{attribute.name}} : </label>
                             <div ng-if="attribute.inputType == 'TEXT'">
                                 <div class="col-md-2">
-                                    <input ng-attr-id="{{attribute.name}}From" class="form-control" name="{{attribute.name}}From" type="text" placeholder="from..." required/>
+                                    <input ng-attr-id="{{attribute.name}}From" class="form-control" name="{{attribute.name}}From" type="text" placeholder="from..."/>
                                 </div>
                                 <div class="col-md-2">
-                                    <input ng-attr-id="{{attribute.name}}To" class="form-control" name="{{attribute.name}}To" type="text" placeholder="to..." required/>
+                                    <input ng-attr-id="{{attribute.name}}To" class="form-control" name="{{attribute.name}}To" type="text" placeholder="to..."/>
                                 </div>
                             </div>
                             <div ng-if="attribute.inputType == 'ENUMERABLE'">

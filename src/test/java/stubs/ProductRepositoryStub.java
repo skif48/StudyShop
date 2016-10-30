@@ -1,11 +1,10 @@
 package stubs;
 
-import com.shop.domain.entity.AttributeValue;
-import com.shop.domain.entity.Product;
-import com.shop.domain.entity.ProductType;
+import com.shop.domain.entity.*;
 import com.shop.repository.products.AttributeRepository;
 import com.shop.repository.products.AttributeValueRepository;
 import com.shop.repository.products.ProductRepository;
+import com.shop.service.dataUtils.SearchRequest;
 import com.sun.corba.se.spi.ior.ObjectKey;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.domain.Example;
@@ -305,6 +304,11 @@ public class ProductRepositoryStub implements ProductRepository {
 
     @Override
     public List<Product> findByLabel(@Param("label") String label) {
+        return null;
+    }
+
+    @Override
+    public List<String> advancedSearchPC(@Param("leftManufacturer") Manufacturer leftManufacturer, @Param("rightManufacturer") Manufacturer rightManufacturer, @Param("leftPrice") Double leftPrice, @Param("rightPrice") Double rightPrice, @Param("coreAttribute") Attribute coreAttribute, @Param("leftCore") Integer leftCore, @Param("rightCore") Integer rightCore, @Param("ramAttribute") Attribute ramAttribute, @Param("leftRam") Integer leftRam, @Param("rightRam") Integer rightRam, @Param("weightAttribute") Attribute weightAttribute, @Param("leftWeight") Integer leftWeight, @Param("rightWeight") Integer rightWeight) {
         return null;
     }
 }

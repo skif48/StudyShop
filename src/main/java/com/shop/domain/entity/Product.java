@@ -22,6 +22,7 @@ public class Product {
     private String label;
     @JsonIgnore
     private Set<ProductImage> images;
+    private Set<AttributeValue> values;
     private Manufacturer manufacturer;
     private Double price;
 
@@ -38,13 +39,14 @@ public class Product {
 
     }
 
-    public Product(UUID uuid, ProductType type, String label, Manufacturer manufacturer, Double price) {
+    public Product(UUID uuid, ProductType type, String label, Manufacturer manufacturer, Double price, Set<AttributeValue> values) {
         this.uuid = uuid.toString();
         this.type = type;
         this.label = label;
         this.manufacturer = manufacturer;
         this.price = price;
         this.images = new HashSet<>();
+        this.values = values;
     }
 
     @Id
@@ -109,12 +111,23 @@ public class Product {
         this.manufacturer = manufacturer;
     }
 
+    @Column(name = "price")
+    @NotNull
     public Double getPrice() {
         return price;
     }
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    public Set<AttributeValue> getValues() {
+        return values;
+    }
+
+    public void setValues(Set<AttributeValue> values) {
+        this.values = values;
     }
 
     public void changeProduct(Product product){

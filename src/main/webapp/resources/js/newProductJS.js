@@ -1,6 +1,17 @@
 'use strict';
 var myApp = angular.module('myApp', ['ngAnimate']);
 
+myApp.controller("SearchController", ['$scope', '$http', function($scope, $http){
+    $scope.search = function(){
+        var query = angular.element('#searchID').val();
+        $http.get("/search?q=" + query).then(function(response) {
+                    window.location = "/search?q=" + query;
+                }, function(response) {
+                    console.log(response.textData);
+                });
+    };
+}]);
+
 myApp.controller('CreateProductController', ['$scope', '$http', function($scope, $http) {
     $scope.data = {
         selection: null ,

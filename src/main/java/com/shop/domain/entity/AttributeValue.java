@@ -1,5 +1,6 @@
 package com.shop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "attribute_value")
 public class AttributeValue {
     private long attributeValueID;
+    @JsonIgnore
     private Product product;
     private Attribute attribute;
     private Integer value;
@@ -49,7 +51,7 @@ public class AttributeValue {
         this.attributeValueID = attributeValueID;
     }
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "product_foreign")
     public Product getProduct() {
         return product;

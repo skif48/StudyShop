@@ -23,42 +23,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body ng-app="myApp">
-    <nav class="navbar">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Shop Simulation</a>
+        <nav class="navbar navbar-default" role="navigation" ng-controller="SearchController">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Shop Simulation</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form">
+                    <div class="input-group">
+                        <input id="searchID" type="text" class="form-control" placeholder="Search">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit" ng-click="search()""><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
+            <ul class="nav navbar-nav">
+                <li><a href="/advancedSearch">Advanced Search</a></li>
+                <#if user??>
+                    <#assign role = user.getRole()>
+                    <#if role == "ADMIN">
+                        <li><a href="/adminPage">Admin Page</a></li>
+                    </#if>
+                </#if>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <#if user??>
+                    <#assign id = user.getId()>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="/user/${id}"><span class="glyphicon glyphicon-user"></span><span id="email"> ${user.getEmail()}</span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Page 1-1</a></li>
-                            <li><a href="#">Page 1-2</a></li>
-                            <li><a href="#">Page 1-3</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-user"></span>Profile details</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span>Cart</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Page 2</a></li>
-                    <li><a href="#">Page 3</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <#if user??>
-                        <#assign id = user.getId()>
-                            <li><a href="/user/${id}"><span class="glyphicon glyphicon-user"></span><span id="email"> ${user.getEmail()}</span></a>
-                            </li>
-                            <#else>
-                                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    </#if>
-                </ul>
-            </div>
-        </div>
+                    <#else>
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </#if>
+            </ul>
+        </div><!-- /.navbar-collapse -->
     </nav>
     <div class="container">
         <form class="form-horizontal" id="productCreateForm" role="form" ng-controller="CreateProductController">

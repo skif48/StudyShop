@@ -8,15 +8,12 @@ import com.shop.service.dataUtils.ManufacturerRequest;
 import com.shop.service.dataUtils.ProductRequest;
 import com.shop.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -283,15 +280,65 @@ public class ShopService {
     public List<ProductInfo> searchByLabel(String label) throws ServiceException {
         List<Product> products = productRepository.findByLabel(label);
         List<String> uuids = new ArrayList<>();
-        for(Product product : products){
+        for (Product product : products) {
             uuids.add(product.getUuid());
         }
         List<ProductInfo> productInfo = new ArrayList<>();
-        for(String uuid : uuids){
+        for (String uuid : uuids) {
             ProductInfo temp = getProductFullInfo(UUID.fromString(uuid));
             productInfo.add(temp);
         }
 
         return productInfo;
+    }
+
+    public List<ProductInfo> advancedSearch(Map<String, String[]> params) throws ServiceException {
+        ProductType productType = productTypeRepository.findByTypeName(params.get("type")[0]);
+        switch(productType.getName()){
+            case "PC" : return advancedSearchPC(params);
+            case "TV" : return advancedSearchTV(params);
+            case "LAPTOP" : return advancedSearchLaptop(params);
+            case "PHONE" : return advancedSearchPhone(params);
+            default: throw new ServiceException(ErrorCode.NO_SUCH_CATEGORY, "Cannot found such product type: " + productType.getName(), null);
+        }
+    }
+
+    private List<ProductInfo> advancedSearchPhone(Map<String, String[]> params) {
+        return null;
+    }
+
+    private List<ProductInfo> advancedSearchLaptop(Map<String, String[]> params) {
+        return null;
+    }
+
+    private List<ProductInfo> advancedSearchTV(Map<String, String[]> params) {
+        return null;
+    }
+
+    private List<ProductInfo> advancedSearchPC(Map<String, String[]> params) throws ServiceException {
+        List<ProductInfo> productInfos = new ArrayList<>();
+        Manufacturer leftManufacturer = manufacturerRepository.findByName(params.get("manufacturer")[0]);
+        Manufacturer rightManufacturer;
+        try {
+            rightManufacturer = manufacturerRepository.findByName(params.get("manufacturer")[1]);
+        } catch (Exception exc){
+            rightManufacturer = leftManufacturer;
+        }
+        Double priceFrom = Double.parseDouble(params.get("priceFrom")[0]);
+        Double priceTo = Double.parseDouble(params.get("priceTo")[0]);
+        Integer weightFrom = Integer.parseInt(params.get("weightFrom")[0]);
+        Integer weightTo = Integer.parseInt(params.get("weightTo")[0]);
+        Integer coreCountFrom = Integer.parseInt(params.get("coreCountFrom")[0]);
+        Integer coreCountTo = Integer.parseInt(params.get("coreCountTo")[0]);
+        Integer ramFrom = Integer.parseInt(params.get("RAMFrom")[0]);
+        Integer ramTo = Integer.parseInt(params.get("RAMTo")[0]);
+        Attribute weightAttribute = attributeRepository.findByName("weight");
+        Attribute coreCountAttribute = attributeRepository.findByName("coreCount");
+        Attribute ramAttribute = attributeRepository.findByName("ram");
+        List<String> result = productRepository.advancedSearchPC(leftManufacturer, rightManufacturer, priceFrom, priceTo, coreCountAttribute, coreCountFrom, coreCountTo, ramAttribute, ramFrom, ramTo, weightAttribute, weightFrom, weightTo);
+        for(String uuid : result){
+            productInfos.add(getProductFullInfo(UUID.fromString(uuid)));
+        }
+        return productInfos;
     }
 }

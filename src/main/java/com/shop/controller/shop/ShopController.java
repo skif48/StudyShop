@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URL;
 import java.security.Principal;
@@ -55,6 +58,7 @@ public class ShopController {
         return new ModelAndView("home", map);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
     public ModelAndView putProduct(Principal principal, @ModelAttribute("userInfo") ModelMap map){
         if(principal != null){
@@ -67,6 +71,7 @@ public class ShopController {
         return new ModelAndView("newProduct", map);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity putProduct(@RequestBody ProductRequest productRequest){
@@ -244,6 +249,27 @@ public class ShopController {
             User user = userService.getUserByEmail(userName).get();
             map.addAttribute("user", user);
         }
+        return new ModelAndView("searchResults", map);
+    }
+
+    @RequestMapping(value = "/advancedSearchResults", method = RequestMethod.GET)
+    public ModelAndView advancedSearchResults(@ModelAttribute ModelMap map, Principal principal,
+                                              HttpServletRequest request) throws ServiceException {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        List<ProductInfo> productInfos = shopService.advancedSearch(parameterMap);
+        List<Product> products = new ArrayList<>();
+        for(ProductInfo productInfo : productInfos){
+            products.add(productInfo.getProduct());
+        }
+        map.addAttribute("allProducts", products);
+        map.addAttribute("query", "advanced");
+        if(principal != null) {
+            String userName = principal.getName();
+            User user = userService.getUserByEmail(userName).get();
+            map.addAttribute("user", user);
+        }
+
+
         return new ModelAndView("searchResults", map);
     }
 }
